@@ -1,10 +1,15 @@
 import { Button, Grid, TextField, Typography, Paper, Alert } from '@mui/material';
-import axios from 'axios';
 import { CreateUserDto } from '../dto/CreateUserDto';
 import { useState } from 'react';
 import CheckIcon from '@mui/icons-material/Check';
+import { useDispatch } from 'react-redux';
+import { createUser } from '../redux/userSlice';
+import { AppDispatch } from '../redux/store';
 
 function RegisterPage() {
+    const dispatch = useDispatch<AppDispatch>();
+
+
     const [formData, setFormData] = useState<CreateUserDto>({
         name: '',
         email: '',
@@ -42,8 +47,8 @@ function RegisterPage() {
         }
 
         try {
-            const response = await axios.post("http://localhost:3000/users", formData);
-            console.log('User signed up successfully:', response.data);
+            const response = await dispatch(createUser(formData));
+            console.log(response.payload);
             setSignUp(true);
             // Optionally clear form or redirect
         } catch (error) {
