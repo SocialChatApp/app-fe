@@ -1,17 +1,28 @@
-import { Divider } from '@mui/material'
+import { Box, Container, Divider } from '@mui/material'
 import './App.css'
 import Header from './components/Header'
-import MainPage from './components/MainPage'
-import RegisterPage from './components/RegisterPage'
+import MainPage from './Pages/MainPage'
+import RegisterPage from './Pages/RegisterPage'
 import Footer from './components/Footer'
+import RouterConfig from './config/RouterConfig'
 
 function App() {
   return (
     <>
-      <Header />
-      <MainPage />
-      <Footer />
-      {/* <RegisterPage /> */}
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh', // Ensure the container takes at least the full viewport height
+        }}
+      >
+        <Header />
+        <Container component="main" sx={{ flex: 1 }}>
+          <RouterConfig />
+          {/* Your main content goes here */}
+        </Container>
+        <Footer />
+      </Box>
     </>
   )
 }

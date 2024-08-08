@@ -3,7 +3,7 @@ import React from 'react';
 import photo from '../assets/images/img1.jpg';
 import votePhoto from '../assets/images/vote.jpg';
 import emotePhoto from '../assets/images/emote.jpg';
-import UserComment from './UserComment';
+import UserComment from '../components/UserComment';
 
 
 function MainPage() {

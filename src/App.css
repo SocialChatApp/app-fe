@@ -24,3 +24,8 @@
   height: 60px;
   background-color: red;
 }
+
+.LinkButton {
+  text-decoration: none;
+  color: inherit;
+}

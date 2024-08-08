@@ -11,11 +11,13 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
+import { Link, useNavigate } from 'react-router-dom';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Header() {
+    const navigate = useNavigate();
     const [isAuth, setAuth] = useState(false);
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -40,23 +42,25 @@ function Header() {
         <AppBar position="static" style={{ marginBottom: '30px' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        href="#"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        Friend Fusion
-                    </Typography>
+                    <Link to='/' className='LinkButton'>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="a"
+                            href="#"
+                            sx={{
+                                mr: 2,
+                                display: { xs: 'none', md: 'flex' },
+                                fontFamily: 'monospace',
+                                fontWeight: 700,
+                                letterSpacing: '.3rem',
+                                color: 'inherit',
+                                textDecoration: 'none',
+                            }}
+                        >
+                            Friend Fusion
+                        </Typography>
+                    </Link>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
@@ -90,16 +94,22 @@ function Header() {
                             {isAuth ? (
                                 pages.map((page) => (
                                     <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                        <Typography textAlign="center">{page}</Typography>
+                                        <Link to={page} className='LinkButton'>
+                                            <Typography textAlign="center">{page}</Typography>
+                                        </Link>
                                     </MenuItem>
                                 ))
                             ) : (
                                 <>
                                     <MenuItem onClick={handleCloseNavMenu}>
-                                        <Typography textAlign="center">Sign Up</Typography>
+                                        <Link to="/auth/register" className='LinkButton'>
+                                            <Typography textAlign="center">Sign Up</Typography>
+                                        </Link>
                                     </MenuItem>
                                     <MenuItem onClick={handleCloseNavMenu}>
-                                        <Typography textAlign="center">Sign In</Typography>
+                                        <Link to="/auth/login" className='LinkButton'>
+                                            <Typography textAlign="center">Sign In</Typography>
+                                        </Link>
                                     </MenuItem>
                                 </>
                             )}
@@ -107,31 +117,36 @@ function Header() {
                         </Menu>
                     </Box>
 
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="a"
-                        href="#"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'flex', md: 'none' },
-                            flexGrow: 1,
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        Friend Fusion
-                    </Typography>
+                    <Link to="/" className='LinkButton'>
+                        <Typography
+                            variant="h5"
+                            noWrap
+                            component="a"
+                            href="#"
+                            sx={{
+                                mr: 2,
+                                display: { xs: 'flex', md: 'none' },
+                                flexGrow: 1,
+                                fontFamily: 'monospace',
+                                fontWeight: 700,
+                                letterSpacing: '.3rem',
+                                color: 'inherit',
+                                textDecoration: 'none',
+                            }}
+                        >
+                            Friend Fusion
+                        </Typography>
+                    </Link>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'flex-end' }}>
                         {isAuth ? (
                             pages.map((page) => (
                                 <Button
                                     key={page}
-                                    onClick={handleCloseNavMenu}
+                                    onClick={() => {
+                                        handleCloseNavMenu();
+                                        navigate(page);
+                                    }}
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                 >
                                     {page}
@@ -139,8 +154,13 @@ function Header() {
                             ))
                         ) : (
                             <Box>
-                                <Button color="inherit">Sign Up</Button>
-                                <Button color="inherit">Sign In</Button>
+                                <Button color="inherit" onClick={() => {
+                                    navigate('/auth/register');
+                                }}>Sign Up</Button>
+
+                                <Button color="inherit" onClick={() => {
+                                    navigate('/auth/login')
+                                }}>Sign In</Button>
                             </Box>
                         )}
                     </Box>
@@ -171,7 +191,9 @@ function Header() {
                                 >
                                     {settings.map((setting) => (
                                         <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                            <Typography textAlign="center">{setting}</Typography>
+                                            <Link to={setting}>
+                                                <Typography textAlign="center">{setting}</Typography>
+                                            </Link>
                                         </MenuItem>
                                     ))}
                                 </Menu>
