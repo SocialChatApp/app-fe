@@ -1,11 +1,10 @@
 export interface CreateUserDto {
-    id?: number,
+    id?: string,
     name: string,
     surname: string,
     email: string,
     password: string,
     role: string,
     searchType: string,
-    accessToken?: string;
 }
 

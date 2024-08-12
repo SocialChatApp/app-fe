@@ -1,8 +1,6 @@
-import { Box, Container, Divider } from '@mui/material'
+import { Box, Container } from '@mui/material'
 import './App.css'
 import Header from './components/Header'
-import MainPage from './Pages/MainPage'
-import RegisterPage from './Pages/RegisterPage'
 import Footer from './components/Footer'
 import RouterConfig from './config/RouterConfig'
 

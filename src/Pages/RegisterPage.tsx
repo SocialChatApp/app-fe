@@ -2,9 +2,9 @@ import { Button, Grid, TextField, Typography, Paper, Alert } from '@mui/material
 import { CreateUserDto } from '../dto/CreateUserDto';
 import { useState } from 'react';
 import CheckIcon from '@mui/icons-material/Check';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createUser } from '../redux/userSlice';
-import { AppDispatch } from '../redux/store';
+import { AppDispatch, RootState } from '../redux/store';
 
 function RegisterPage() {
     const dispatch = useDispatch<AppDispatch>();
@@ -21,7 +21,7 @@ function RegisterPage() {
 
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-    const [isSignUp, setSignUp] = useState(false);
+    const { isSignUp } = useSelector((state: RootState) => state.user);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -49,7 +49,6 @@ function RegisterPage() {
         try {
             const response = await dispatch(createUser(formData));
             console.log(response.payload);
-            setSignUp(true);
             // Optionally clear form or redirect
         } catch (error) {
             console.error('Error signing up user:', error);

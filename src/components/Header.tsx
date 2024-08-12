@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,13 +12,18 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['Meet', 'Pricing', 'Blog'];
+const settings = ['Profile', 'Settings', 'Logout'];
 
 function Header() {
     const navigate = useNavigate();
-    const [isAuth, setAuth] = useState(false);
+    // const [isAuth, setAuth] = useState(false);
+    const { isAuth, info: user } = useSelector((state: RootState) => state.user);
+    const profileImageUrl = `https://nestjs-upload.s3.amazonaws.com/user/${user.id}.jpg`;
+
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -94,7 +99,7 @@ function Header() {
                             {isAuth ? (
                                 pages.map((page) => (
                                     <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                        <Link to={page} className='LinkButton'>
+                                        <Link to={page.toLowerCase()} className='LinkButton'>
                                             <Typography textAlign="center">{page}</Typography>
                                         </Link>
                                     </MenuItem>
@@ -145,7 +150,7 @@ function Header() {
                                     key={page}
                                     onClick={() => {
                                         handleCloseNavMenu();
-                                        navigate(page);
+                                        navigate(page.toLowerCase());
                                     }}
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                 >
@@ -170,7 +175,7 @@ function Header() {
                             <>
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                        <Avatar alt="User" src="/static/images/avatar/2.jpg" />
+                                        <Avatar alt="User" src={profileImageUrl} />
                                     </IconButton>
                                 </Tooltip>
                                 <Menu
@@ -191,7 +196,7 @@ function Header() {
                                 >
                                     {settings.map((setting) => (
                                         <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                            <Link to={setting}>
+                                            <Link to={"user/" + setting.toLowerCase()} className='LinkButton'>
                                                 <Typography textAlign="center">{setting}</Typography>
                                             </Link>
                                         </MenuItem>

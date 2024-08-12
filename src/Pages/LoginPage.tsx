@@ -5,13 +5,13 @@ import { AppDispatch, RootState } from '../redux/store';
 import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
 import { loginUser } from '../redux/userSlice';
 import { CreateUserDto } from '../dto/CreateUserDto';
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
 
     const dispatch = useDispatch<AppDispatch>();
 
-    const userState = useSelector((state: RootState) => state.user);
-
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState<LoginDto>({
         email: '',
@@ -42,7 +42,10 @@ function LoginPage() {
         }
 
         try {
-            await dispatch(loginUser(formData));
+            const loginResult = await dispatch(loginUser(formData));
+            if (loginResult.payload) {
+                navigate('/meet-page');
+            }
         } catch (error) {
             console.error('Error signing up user:', error);
         }
