@@ -11,14 +11,20 @@ function App() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          minHeight: '100vh', // Ensure the container takes at least the full viewport height
+          minHeight: '100vh',
         }}
       >
         <Header />
-        <Container component="main" sx={{ flex: 1 }}>
+        <Box
+          component="main"
+          sx={{
+            flex: 1,
+            width: '100%',
+          }}
+        >
           <RouterConfig />
           {/* Your main content goes here */}
-        </Container>
+        </Box>
         <Footer />
       </Box>
     </>

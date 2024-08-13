@@ -1,34 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
 import { Avatar, Box, TextField, ToggleButton, ToggleButtonGroup, Typography, Divider, Button } from '@mui/material';
-import { updateAvatar } from '../redux/userSlice';
+import { updateUser, uploadAvatar } from '../redux/userSlice';
+import { UpdateUserDto } from '../dto/UpdateUserDto';
 
 function UserSettings() {
     const { info: user } = useSelector((store: RootState) => store.user);
 
-    const profileImageUrl = `https://nestjs-upload.s3.amazonaws.com/user/${user.id}.jpg`;
+    const [formData, setFormData] = useState({ ...user });
 
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [isFormChanged, setIsFormChanged] = useState(false);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
-            setSelectedFile(file); // Dosya objesini set ediyoruz
-
-            // Dosyanın önizlemesini oluşturuyoruz
+            setSelectedFile(file);
             const fileUrl = URL.createObjectURL(file);
             setImagePreview(fileUrl);
         }
     };
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prevState => ({ ...prevState, [name]: value }));
+    };
+
+    useEffect(() => {
+        const isChanged =
+            formData.name !== user.name ||
+            formData.surname !== user.surname ||
+            formData.email !== user.email ||
+            formData.password !== user.password ||
+            formData.role !== user.role ||
+            formData.searchType !== user.searchType ||
+            (selectedFile !== null && imagePreview !== user.avatarUrl);
+
+        setIsFormChanged(isChanged);
+    }, [formData, selectedFile, imagePreview, user]);
+
     const dispatch = useDispatch<AppDispatch>();
 
-    const handleUpdateAvatar = () => {
+    const handleUpdateAvatar = async () => {
+
+        const updateUserDto: UpdateUserDto = {
+            name: formData.name,
+            surname: formData.surname,
+            email: formData.email,
+            password: formData.password,
+            searchType: formData.searchType,
+            role: formData.role
+        };
+
+
         if (selectedFile && user.id) {
-            dispatch(updateAvatar({ img: selectedFile, userId: user.id }));
+            updateUserDto.avatarUrl = await dispatch(uploadAvatar({ img: selectedFile, userId: user.id })).unwrap();
         }
+
+        if (user.id)
+            dispatch(updateUser({
+                userId: user.id,
+                userObj: updateUserDto
+            }));
     };
 
     return (
@@ -50,10 +85,9 @@ function UserSettings() {
 
                 <Avatar
                     alt="Profile Photo"
-                    src={imagePreview || profileImageUrl}
+                    src={imagePreview || user.avatarUrl}
                     sx={{ width: 120, height: 120, mb: 2 }}
                 />
-
 
                 <Button
                     variant="contained"
@@ -71,39 +105,47 @@ function UserSettings() {
 
                 <TextField
                     id="name"
+                    name="name"
                     label="Name"
-                    value={user.name}
+                    value={formData.name}
                     variant="outlined"
                     fullWidth
                     sx={{ mb: 2 }}
+                    onChange={handleInputChange}
                 />
 
                 <TextField
                     id="surname"
+                    name="surname"
                     label="Surname"
-                    value={user.surname}
+                    value={formData.surname}
                     variant="outlined"
                     fullWidth
                     sx={{ mb: 2 }}
+                    onChange={handleInputChange}
                 />
 
                 <TextField
                     id="email"
+                    name="email"
                     label="Mail"
-                    value={user.email}
+                    value={formData.email}
                     variant="outlined"
                     fullWidth
                     sx={{ mb: 2 }}
+                    onChange={handleInputChange}
                 />
 
                 <TextField
                     id="password"
+                    name="password"
                     type="password"
                     label="Password"
-                    value={user.password}
+                    value={formData.password}
                     variant="outlined"
                     fullWidth
                     sx={{ mb: 2 }}
+                    onChange={handleInputChange}
                 />
 
                 <Divider sx={{ width: '100%', my: 2 }} />
@@ -115,9 +157,10 @@ function UserSettings() {
                     color="primary"
                     exclusive
                     aria-label="Search Type"
-                    value={user.searchType}
+                    value={formData.searchType}
                     fullWidth
                     sx={{ mb: 2 }}
+                    onChange={(e, value) => setFormData(prev => ({ ...prev, searchType: value }))}
                 >
                     <ToggleButton value="PRIVATE">PRIVATE</ToggleButton>
                     <ToggleButton value="PUBLIC">PUBLIC</ToggleButton>
@@ -130,8 +173,9 @@ function UserSettings() {
                     color="primary"
                     exclusive
                     aria-label="Role"
-                    value={user.role}
+                    value={formData.role}
                     fullWidth
+                    onChange={(e, value) => setFormData(prev => ({ ...prev, role: value }))}
                 >
                     <ToggleButton value="PREMIUM">PREMIUM</ToggleButton>
                     <ToggleButton value="NORMAL">NORMAL</ToggleButton>
@@ -139,6 +183,7 @@ function UserSettings() {
                 </ToggleButtonGroup>
                 <Button
                     onClick={handleUpdateAvatar}
+                    disabled={!isFormChanged}
                 >
                     Gönder
                 </Button>

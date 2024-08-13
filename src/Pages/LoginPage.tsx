@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { LoginDto } from '../dto/LoginDto';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
-import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, LinearProgress, Paper, TextField, Typography } from '@mui/material';
 import { loginUser } from '../redux/userSlice';
 import { CreateUserDto } from '../dto/CreateUserDto';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 function LoginPage() {
 
     const dispatch = useDispatch<AppDispatch>();
+    const { isLoading } = useSelector((store: RootState) => store.user);
 
     const navigate = useNavigate();
 
@@ -55,48 +56,61 @@ function LoginPage() {
 
 
     return (
-        <div>
-            <Paper elevation={3} style={{ padding: '20px', maxWidth: '500px', margin: 'auto' }}>
-                <Typography variant="h4" gutterBottom align="center">
-                    Sign in
-                </Typography>
-                <Grid container spacing={2} direction="column">
-                    <Grid item>
-                        <TextField
-                            name="email"
-                            label="Email"
-                            variant="outlined"
-                            fullWidth
-                            value={formData.email}
-                            onChange={handleChange}
-                            error={!!errors.email}
-                            helperText={errors.email}
-                        />
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh',
+        }}>
+            {
+                !isLoading ? <Paper elevation={3} style={{ padding: '20px', maxWidth: '500px', margin: 'auto' }}>
+                    <Typography variant="h4" gutterBottom align="center">
+                        Sign in
+                    </Typography>
+                    <Grid container spacing={2} direction="column">
+                        <Grid item>
+                            <TextField
+                                name="email"
+                                label="Email"
+                                variant="outlined"
+                                fullWidth
+                                value={formData.email}
+                                onChange={handleChange}
+                                error={!!errors.email}
+                                helperText={errors.email}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <TextField
+                                name="password"
+                                type="password"
+                                label="Password"
+                                variant="outlined"
+                                fullWidth
+                                value={formData.password}
+                                onChange={handleChange}
+                                error={!!errors.password}
+                                helperText={errors.password}
+                            />
+                        </Grid>
                     </Grid>
-                    <Grid item>
-                        <TextField
-                            name="password"
-                            type="password"
-                            label="Password"
-                            variant="outlined"
-                            fullWidth
-                            value={formData.password}
-                            onChange={handleChange}
-                            error={!!errors.password}
-                            helperText={errors.password}
-                        />
-                    </Grid>
-                </Grid>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    style={{ marginTop: '20px' }}
-                    fullWidth
-                    onClick={SignIn}
-                >
-                    Login
-                </Button>
-            </Paper>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ marginTop: '20px' }}
+                        fullWidth
+                        onClick={SignIn}
+                    >
+                        Login
+                    </Button>
+                </Paper>
+
+                    :
+
+                    <Box sx={{ width: '100%' }}>
+                        <LinearProgress />
+                    </Box>
+            }
 
         </div>
     )

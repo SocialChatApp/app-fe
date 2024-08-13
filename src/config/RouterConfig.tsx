@@ -5,6 +5,7 @@ import LoginPage from '../Pages/LoginPage';
 import MeetingPage from '../Pages/MeetingPage';
 import UserProfile from '../Pages/UserProfile';
 import UserSettings from '../Pages/UserSettings';
+import CreatePost from '../components/CreatePost';
 
 
 function RouterConfig() {
@@ -23,7 +24,9 @@ function RouterConfig() {
                 <Route path='/user'>
                     <Route path='profile' element={<UserProfile />} />
                     <Route path='settings' element={<UserSettings />} />
+                    <Route path='create-post' element={<CreatePost />} />
                 </Route>
+
 
             </Routes>
         </div>

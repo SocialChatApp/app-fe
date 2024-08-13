@@ -1,27 +1,27 @@
-import { Button, Grid, TextField, Typography, Paper, Alert } from '@mui/material';
-import { CreateUserDto } from '../dto/CreateUserDto';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { Button, Grid, TextField, Typography, Paper, Alert, Box, LinearProgress } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import { useDispatch, useSelector } from 'react-redux';
-import { createUser } from '../redux/userSlice';
 import { AppDispatch, RootState } from '../redux/store';
+import { CreateUserDto } from '../dto/CreateUserDto';
+import { createUser } from '../redux/userSlice';
 
 function RegisterPage() {
     const dispatch = useDispatch<AppDispatch>();
-
+    const { isSignUp, isLoading } = useSelector((state: RootState) => state.user);
 
     const [formData, setFormData] = useState<CreateUserDto>({
+        id: '',
         name: '',
         email: '',
         surname: '',
         password: '',
         role: "NORMAL",
-        searchType: "PUBLIC"
+        searchType: "PUBLIC",
+        avatarUrl: ''
     });
 
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-    const { isSignUp } = useSelector((state: RootState) => state.user);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -56,79 +56,97 @@ function RegisterPage() {
     };
 
     return (
-        <>
-            {!isSignUp ? (
-                <Paper elevation={3} style={{ padding: '20px', maxWidth: '500px', margin: 'auto' }}>
-                    <Typography variant="h4" gutterBottom align="center">
-                        Register
-                    </Typography>
-                    <Grid container spacing={2} direction="column">
-                        <Grid item>
-                            <TextField
-                                name="name"
-                                label="Name"
-                                variant="outlined"
-                                fullWidth
-                                value={formData.name}
-                                onChange={handleChange}
-                                error={!!errors.name}
-                                helperText={errors.name}
-                            />
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh',
+        }}>
+            {!isLoading ? (
+                isSignUp ? (
+                    <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+                        Congratulations, your registration has been completed successfully. You can now log in.
+                    </Alert>
+                ) : (
+                    <Paper elevation={3} style={{ padding: '20px', maxWidth: '500px', margin: 'auto' }}>
+                        <Typography variant="h4" gutterBottom align="center">
+                            Register
+                        </Typography>
+                        <Grid container spacing={2} direction="column">
+                            <Grid item>
+                                <TextField
+                                    name="name"
+                                    label="Name"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    error={!!errors.name}
+                                    helperText={errors.name}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    name="surname"
+                                    label="Surname"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={formData.surname}
+                                    onChange={handleChange}
+                                    error={!!errors.surname}
+                                    helperText={errors.surname}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    name="email"
+                                    label="Email"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    error={!!errors.email}
+                                    helperText={errors.email}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    name="password"
+                                    type="password"
+                                    label="Password"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    error={!!errors.password}
+                                    helperText={errors.password}
+                                />
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <TextField
-                                name="surname"
-                                label="Surname"
-                                variant="outlined"
-                                fullWidth
-                                value={formData.surname}
-                                onChange={handleChange}
-                                error={!!errors.surname}
-                                helperText={errors.surname}
-                            />
-                        </Grid>
-                        <Grid item>
-                            <TextField
-                                name="email"
-                                label="Email"
-                                variant="outlined"
-                                fullWidth
-                                value={formData.email}
-                                onChange={handleChange}
-                                error={!!errors.email}
-                                helperText={errors.email}
-                            />
-                        </Grid>
-                        <Grid item>
-                            <TextField
-                                name="password"
-                                type="password"
-                                label="Password"
-                                variant="outlined"
-                                fullWidth
-                                value={formData.password}
-                                onChange={handleChange}
-                                error={!!errors.password}
-                                helperText={errors.password}
-                            />
-                        </Grid>
-                    </Grid>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        style={{ marginTop: '20px' }}
-                        fullWidth
-                        onClick={signUp}
-                    >
-                        Sign Up
-                    </Button>
-                </Paper>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            style={{ marginTop: '20px' }}
+                            fullWidth
+                            onClick={signUp}
+                        >
+                            Sign Up
+                        </Button>
+                    </Paper>
+                )
             ) : (
-                <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
-                    Congratulations, your registration has been completed successfully. You can now log in.
-                </Alert>
+                <Box sx={{ width: '100%' }}>
+                    {isSignUp ? (
+                        <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+                            Congratulations, your registration has been completed successfully. You can now log in.
+                        </Alert>
+
+                    ) : (
+                        <LinearProgress />
+                    )}
+                </Box>
             )}
-        </>
+        </div>
     );
 }
 

@@ -22,7 +22,6 @@ function Header() {
     const navigate = useNavigate();
     // const [isAuth, setAuth] = useState(false);
     const { isAuth, info: user } = useSelector((state: RootState) => state.user);
-    const profileImageUrl = `https://nestjs-upload.s3.amazonaws.com/user/${user.id}.jpg`;
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -44,7 +43,7 @@ function Header() {
     };
 
     return (
-        <AppBar position="static" style={{ marginBottom: '30px' }}>
+        <AppBar position="static" >
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Link to='/' className='LinkButton'>
@@ -175,7 +174,7 @@ function Header() {
                             <>
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                        <Avatar alt="User" src={profileImageUrl} />
+                                        <Avatar alt="User" src={user.avatarUrl} />
                                     </IconButton>
                                 </Tooltip>
                                 <Menu

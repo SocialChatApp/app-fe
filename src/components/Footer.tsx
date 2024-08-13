@@ -12,7 +12,6 @@ function Footer() {
                 padding: '20px',
                 backgroundColor: '#f5f5f5',
                 borderTop: '1px solid #e0e0e0',
-                marginTop: '20px'
             }}
         >
             <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
