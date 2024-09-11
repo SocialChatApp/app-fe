@@ -1,11 +1,9 @@
-import LoginPage from "../Pages/auth/LoginPage";
+import { Outlet } from "react-router-dom";
 
 
 const AuthLayout = () => {
     return (
-        <>
-            <LoginPage />
-        </>
+        <Outlet />
     );
 }
 

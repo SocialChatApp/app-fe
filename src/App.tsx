@@ -31,6 +31,7 @@ function App() {
           <Route path='/' element={<Navigate to={user ? "/home/welcome" : "/auth/login"} replace />} />
 
           <Route path="/home" element={<MainLayout />} >
+            <Route index element={<Navigate to="welcome" />} />
 
             {/* MAIN LAYOUT - PRIVATE PAGES */}
             <Route index path='meeting' element={
@@ -51,9 +52,10 @@ function App() {
 
           {/* AUTH LAYOUT */}
           <Route path='/auth' element={<AuthLayout />} >
+          <Route index element={<Navigate to="register" />} />
 
-            <Route path='login' element={<LoginPage />} />
             <Route path='register' element={<RegisterPage />} />
+            <Route path='login' element={<LoginPage />} />
           </Route>
 
         </Routes>
