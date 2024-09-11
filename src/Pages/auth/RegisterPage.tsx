@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Button, Grid, TextField, Typography, Paper, Alert, Box, LinearProgress } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../redux/store';
-import { CreateUserDto } from '../dto/CreateUserDto';
-import { createUser } from '../redux/userSlice';
+import { AppDispatch, RootState } from '../../redux/store';
+import { CreateUserDto } from '../../dto/CreateUserDto';
+import { createUser } from '../../redux/userSlice';
 
 function RegisterPage() {
     const dispatch = useDispatch<AppDispatch>();

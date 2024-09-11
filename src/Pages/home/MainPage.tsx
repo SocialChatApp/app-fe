@@ -1,12 +1,11 @@
-import { Box, Grid, Typography, Button, Divider } from '@mui/material';
-import React from 'react';
-import photo from '../assets/images/img1.jpg';
-import votePhoto from '../assets/images/vote.jpg';
-import emotePhoto from '../assets/images/emote.jpg';
-import UserComment from '../components/UserComment';
+import { Box, Button, Divider, Grid, Typography } from '@mui/material';
+import photo from '../../assets/images/img1.jpg';
+import votePhoto from '../../assets/images/vote.jpg';
+import UserComment from '../../components/UserComment';
 
 
 function MainPage() {
+    console.log("main page")
     return (
         <div>
             <Grid container spacing={2} sx={{ flexGrow: 1 }}>

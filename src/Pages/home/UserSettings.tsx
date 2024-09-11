@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../redux/store';
+// import { AppDispatch, RootState } from '../redux/store';
 import { Avatar, Box, TextField, ToggleButton, ToggleButtonGroup, Typography, Divider, Button } from '@mui/material';
-import { updateUser, uploadAvatar } from '../redux/userSlice';
-import { UpdateUserDto } from '../dto/UpdateUserDto';
+import { AppDispatch, RootState } from '../../redux/store';
+import { UpdateUserDto } from '../../dto/UpdateUserDto';
+import { updateUser, uploadAvatar } from '../../redux/userSlice';
+// import { updateUser, uploadAvatar } from '../redux/userSlice';
+// import { UpdateUserDto } from '../dto/UpdateUserDto';
 
 function UserSettings() {
     const { info: user } = useSelector((store: RootState) => store.user);

@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import Post from '../components/Post';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllPosts } from '../redux/postSlice';
-import { AppDispatch, RootState } from '../redux/store';
-import { Box, Fab, Grid, LinearProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { Box, Fab, Grid, LinearProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import Post from '../../components/Post';
+import { fetchAllPosts } from '../../redux/postSlice';
+import { AppDispatch, RootState } from '../../redux/store';
 
 function UserProfile() {
     const dispatch = useDispatch<AppDispatch>();
