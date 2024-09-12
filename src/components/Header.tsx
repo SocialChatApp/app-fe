@@ -164,7 +164,7 @@ function Header() {
                         ) : (
                             <Box>
                                 <Button color="inherit" style={{ fontFamily: 'monospace' }} onClick={() => {
-                                    navigate('/auth/register');
+                                    navigate('/auth/signin');
                                 }}>Sign Up</Button>
 
                                 <Button color="inherit" style={{ fontFamily: 'monospace' }} onClick={() => {
