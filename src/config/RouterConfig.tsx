@@ -7,8 +7,8 @@ import MainPage from '../Pages/home/MainPage';
 import UserProfile from '../Pages/home/UserProfile';
 import UserSettings from '../Pages/home/UserSettings';
 import MeetingPage from '../Pages/home/MeetingPage';
-import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
+import { useSelector } from 'react-redux';
 
 
 function RouterConfig() {
@@ -49,7 +49,8 @@ function RouterConfig() {
             <Route path='/auth' element={<AuthLayout />} >
                 <Route index element={<Navigate to="signin" />} />
 
-                <Route path='signin' element={<AuthPageContainer />} />
+                <Route path='signin' element={<AuthPageContainer formType='register' />} />
+                <Route path='login' element={<AuthPageContainer formType='login' />} />
             </Route>
 
         </Routes>

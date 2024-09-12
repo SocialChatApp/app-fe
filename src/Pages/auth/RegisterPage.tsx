@@ -123,14 +123,21 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ setForm }) => {
                             <Button
                                 variant="contained"
                                 color="primary"
-                                style={{ marginTop: '20px' }}
+                                style={{ backgroundColor: '#ADA2FF', marginTop: '20px' }}
                                 fullWidth
                                 onClick={signUp}
                             >
-                                {isLoading ? <CircularProgress color="inherit" /> : <Typography>Kaydet</Typography>}
+                                {isLoading ? <CircularProgress color="inherit" /> : <Typography >Send</Typography>}
 
                             </Button>
-                            <Typography>Zaten hesabın var mı? <span onClick={() => { setForm('login') }}>Giriş yap</span> </Typography>
+                            <Typography>You already have account?
+                                <span
+                                    style={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}
+                                    onClick={() => { setForm('login') }}
+                                >
+                                    Login
+                                </span>
+                            </Typography>
 
                         </Stack>
                     </Box>

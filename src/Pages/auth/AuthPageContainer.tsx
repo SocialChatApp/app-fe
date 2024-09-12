@@ -6,9 +6,13 @@ import RegisterPage from "./RegisterPage";
 import TwoFactorAuth from "./TwoFactorAuth";
 
 
-function AuthPageContainer() {
-    const [form, setForm] = useState<'login' | 'register' | '2FA'>('2FA');
+interface AuthPageProps {
+    formType: 'login' | 'register' | '2FA';
+}
 
+function AuthPageContainer({ formType }: AuthPageProps) {
+
+    const [form, setForm] = useState<'login' | 'register' | '2FA'>(formType);
     const renderForm = () => {
         switch (form) {
             case 'login':
@@ -37,7 +41,6 @@ function AuthPageContainer() {
                     </Box>
                 </Stack>
             </Box>
-
         </Box>
         // </Container>
     );
