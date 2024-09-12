@@ -1,4 +1,4 @@
-import { Box, Button, Grid, LinearProgress, Paper, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, CircularProgress, Grid, LinearProgress, Link, Stack, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,13 @@ import { LoginDto } from '../../dto/LoginDto';
 import { AppDispatch, RootState } from '../../redux/store';
 import { loginUser } from '../../redux/userSlice';
 
-function LoginPage() {
+interface LoginPageProps {
+    setForm: React.Dispatch<React.SetStateAction<'login' | 'register' | '2FA'>>;
+}
+
+const LoginPage: React.FC<LoginPageProps> = ({ setForm }) => {
+
+    // const { setForm } = props;
 
     const dispatch = useDispatch<AppDispatch>();
     const { isLoading } = useSelector((store: RootState) => store.user);
@@ -55,44 +61,39 @@ function LoginPage() {
 
 
     return (
-        <div style={{
+        <Box style={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             height: '100vh',
         }}>
-            {
-                !isLoading ? <Paper elevation={3} style={{ padding: '20px', maxWidth: '500px', margin: 'auto' }}>
-                    <Typography variant="h4" gutterBottom align="center">
-                        Sign in
-                    </Typography>
-                    <Grid container spacing={2} direction="column">
-                        <Grid item>
-                            <TextField
-                                name="email"
-                                label="Email"
-                                variant="outlined"
-                                fullWidth
-                                value={formData.email}
-                                onChange={handleChange}
-                                error={!!errors.email}
-                                helperText={errors.email}
-                            />
-                        </Grid>
-                        <Grid item>
-                            <TextField
-                                name="password"
-                                type="password"
-                                label="Password"
-                                variant="outlined"
-                                fullWidth
-                                value={formData.password}
-                                onChange={handleChange}
-                                error={!!errors.password}
-                                helperText={errors.password}
-                            />
-                        </Grid>
-                    </Grid>
+
+            <Box width={{ xs: "100%", sm: "60%" }}>
+                <Typography variant="h2" gutterBottom align="center">
+                    Sign in
+                </Typography>
+                <Stack spacing={2} direction="column">
+                    <TextField
+                        name="email"
+                        label="Email"
+                        variant="outlined"
+                        fullWidth
+                        value={formData.email}
+                        onChange={handleChange}
+                        error={!!errors.email}
+                        helperText={errors.email}
+                    />
+                    <TextField
+                        name="password"
+                        type="password"
+                        label="Password"
+                        variant="outlined"
+                        fullWidth
+                        value={formData.password}
+                        onChange={handleChange}
+                        error={!!errors.password}
+                        helperText={errors.password}
+                    />
                     <Button
                         variant="contained"
                         color="primary"
@@ -100,19 +101,14 @@ function LoginPage() {
                         fullWidth
                         onClick={SignIn}
                     >
-                        Login
+                        {isLoading ? <CircularProgress color="inherit" /> : <Typography>Giriş</Typography>}
                     </Button>
-                </Paper>
+                    <Typography>Hesabın yok mu? <span onClick={() => { setForm('register') }}>kaydol</span> </Typography>
+                </Stack>
+            </Box>
 
-                    :
-
-                    <Box sx={{ width: '100%' }}>
-                        <LinearProgress />
-                    </Box>
-            }
-
-        </div>
+        </Box>
     )
 }
 
-export default LoginPage
+export default LoginPage;

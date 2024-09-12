@@ -1,11 +1,10 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import RegisterPage from '../Pages/auth/RegisterPage';
-import AuthLayout from '../layouts/AuthLayout';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Guard from '../components/Auth/Guard';
+import AuthLayout from '../layouts/AuthLayout';
 import MainLayout from '../layouts/MainLayout';
-import UserProfile from '../Pages/home/UserProfile';
+import AuthPageContainer from '../Pages/auth/AuthPageContainer';
 import MainPage from '../Pages/home/MainPage';
-import LoginPage from '../Pages/auth/LoginPage';
+import UserProfile from '../Pages/home/UserProfile';
 import UserSettings from '../Pages/home/UserSettings';
 import MeetingPage from '../Pages/home/MeetingPage';
 import { useSelector } from 'react-redux';
@@ -48,10 +47,9 @@ function RouterConfig() {
 
             {/* AUTH LAYOUT */}
             <Route path='/auth' element={<AuthLayout />} >
-                <Route index element={<Navigate to="register" />} />
+                <Route index element={<Navigate to="signin" />} />
 
-                <Route path='register' element={<RegisterPage />} />
-                <Route path='login' element={<LoginPage />} />
+                <Route path='signin' element={<AuthPageContainer />} />
             </Route>
 
         </Routes>

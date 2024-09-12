@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
-import { Button, Grid, TextField, Typography, Paper, Alert, Box, LinearProgress } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
+import { Alert, Box, Button, CircularProgress, Stack, TextField, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../redux/store';
 import { CreateUserDto } from '../../dto/CreateUserDto';
+import { AppDispatch, RootState } from '../../redux/store';
 import { createUser } from '../../redux/userSlice';
 
-function RegisterPage() {
+interface RegisterPageProps {
+    setForm: React.Dispatch<React.SetStateAction<'login' | 'register' | '2FA'>>;
+}
+
+const RegisterPage: React.FC<RegisterPageProps> = ({ setForm }) => {
+
     const dispatch = useDispatch<AppDispatch>();
     const { isSignUp, isLoading } = useSelector((state: RootState) => state.user);
 
@@ -56,97 +61,83 @@ function RegisterPage() {
     };
 
     return (
-        <div style={{
+        <Box style={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             height: '100vh',
         }}>
-            {!isLoading ? (
+            {
                 isSignUp ? (
                     <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
                         Congratulations, your registration has been completed successfully. You can now log in.
                     </Alert>
                 ) : (
-                    <Paper elevation={3} style={{ padding: '20px', maxWidth: '500px', margin: 'auto' }}>
+                    <Box width={{ xs: "100%", sm: "60%" }}>
                         <Typography variant="h4" gutterBottom align="center">
                             Register
                         </Typography>
-                        <Grid container spacing={2} direction="column">
-                            <Grid item>
-                                <TextField
-                                    name="name"
-                                    label="Name"
-                                    variant="outlined"
-                                    fullWidth
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    error={!!errors.name}
-                                    helperText={errors.name}
-                                />
-                            </Grid>
-                            <Grid item>
-                                <TextField
-                                    name="surname"
-                                    label="Surname"
-                                    variant="outlined"
-                                    fullWidth
-                                    value={formData.surname}
-                                    onChange={handleChange}
-                                    error={!!errors.surname}
-                                    helperText={errors.surname}
-                                />
-                            </Grid>
-                            <Grid item>
-                                <TextField
-                                    name="email"
-                                    label="Email"
-                                    variant="outlined"
-                                    fullWidth
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    error={!!errors.email}
-                                    helperText={errors.email}
-                                />
-                            </Grid>
-                            <Grid item>
-                                <TextField
-                                    name="password"
-                                    type="password"
-                                    label="Password"
-                                    variant="outlined"
-                                    fullWidth
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    error={!!errors.password}
-                                    helperText={errors.password}
-                                />
-                            </Grid>
-                        </Grid>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            style={{ marginTop: '20px' }}
-                            fullWidth
-                            onClick={signUp}
-                        >
-                            Sign Up
-                        </Button>
-                    </Paper>
-                )
-            ) : (
-                <Box sx={{ width: '100%' }}>
-                    {isSignUp ? (
-                        <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
-                            Congratulations, your registration has been completed successfully. You can now log in.
-                        </Alert>
+                        <Stack spacing={2} direction="column">
 
-                    ) : (
-                        <LinearProgress />
-                    )}
-                </Box>
-            )}
-        </div>
+                            <TextField
+                                name="name"
+                                label="Name"
+                                variant="outlined"
+                                fullWidth
+                                value={formData.name}
+                                onChange={handleChange}
+                                error={!!errors.name}
+                                helperText={errors.name}
+                            />
+                            <TextField
+                                name="surname"
+                                label="Surname"
+                                variant="outlined"
+                                fullWidth
+                                value={formData.surname}
+                                onChange={handleChange}
+                                error={!!errors.surname}
+                                helperText={errors.surname}
+                            />
+                            <TextField
+                                name="email"
+                                label="Email"
+                                variant="outlined"
+                                fullWidth
+                                value={formData.email}
+                                onChange={handleChange}
+                                error={!!errors.email}
+                                helperText={errors.email}
+                            />
+                            <TextField
+                                name="password"
+                                type="password"
+                                label="Password"
+                                variant="outlined"
+                                fullWidth
+                                value={formData.password}
+                                onChange={handleChange}
+                                error={!!errors.password}
+                                helperText={errors.password}
+                            />
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                style={{ marginTop: '20px' }}
+                                fullWidth
+                                onClick={signUp}
+                            >
+                                {isLoading ? <CircularProgress color="inherit" /> : <Typography>Kaydet</Typography>}
+
+                            </Button>
+                            <Typography>Zaten hesabın var mı? <span onClick={() => { setForm('login') }}>Giriş yap</span> </Typography>
+
+                        </Stack>
+                    </Box>
+                )
+
+            }
+        </Box >
     );
 }
 
