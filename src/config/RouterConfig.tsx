@@ -8,17 +8,17 @@ import MainPage from '../Pages/home/MainPage';
 import LoginPage from '../Pages/auth/LoginPage';
 import UserSettings from '../Pages/home/UserSettings';
 import MeetingPage from '../Pages/home/MeetingPage';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 
 function RouterConfig() {
 
+    const userInfoFromStore = useSelector((store: RootState) => store.user);
     const user = {
-        email: "test@mail.com",
-        accessToken: "examleusersAccessToken"
+        email: userInfoFromStore.info.email,
+        accessToken: userInfoFromStore.accessToken
     };
-
-    //const user = undefined;
-
 
     return (
         <Routes>
