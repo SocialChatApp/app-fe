@@ -1,35 +1,60 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import RegisterPage from '../Pages/auth/RegisterPage';
-import MainPage from '../Pages/MainPage';
+import AuthLayout from '../layouts/AuthLayout';
+import Guard from '../components/Auth/Guard';
+import MainLayout from '../layouts/MainLayout';
+import UserProfile from '../Pages/home/UserProfile';
+import MainPage from '../Pages/home/MainPage';
 import LoginPage from '../Pages/auth/LoginPage';
-import MeetingPage from '../Pages/MeetingPage';
-import UserProfile from '../Pages/UserProfile';
-import UserSettings from '../Pages/UserSettings';
-import CreatePost from '../components/CreatePost';
+import UserSettings from '../Pages/home/UserSettings';
+import MeetingPage from '../Pages/home/MeetingPage';
 
 
 function RouterConfig() {
+
+    const user = {
+        email: "test@mail.com",
+        accessToken: "examleusersAccessToken"
+    };
+
+    //const user = undefined;
+
+
     return (
-        <div>
-            <Routes>
-                <Route path='/' element={<MainPage />} />
+        <Routes>
+            {/* MAIN LAYOUT */}
+            <Route path='*' element={<Navigate to="/" />} />
+            <Route path='/' element={<Navigate to={user ? "/home/welcome" : "/auth/login"} replace />} />
 
-                <Route path='/meet-page' element={<MeetingPage />} />
+            <Route path="/home" element={<MainLayout />} >
+                <Route index element={<Navigate to="welcome" />} />
 
-                <Route path='/auth'>
-                    <Route path='login' element={<LoginPage />} />
-                    <Route path='register' element={<RegisterPage />} />
-                </Route>
+                {/* MAIN LAYOUT - PRIVATE PAGES */}
+                <Route index path='meeting' element={
+                    <Guard>
+                        <MeetingPage />
+                    </Guard>
+                } />
+                <Route index path='settings' element={
+                    <Guard>
+                        <UserSettings />
+                    </Guard>
+                } />
 
-                <Route path='/user'>
-                    <Route path='profile' element={<UserProfile />} />
-                    <Route path='settings' element={<UserSettings />} />
-                    <Route path='create-post' element={<CreatePost />} />
-                </Route>
+                {/* MAIN LAYOUT - PUBLIC PAGES */}
+                <Route path='welcome' element={<MainPage />} />
+                <Route path='user' element={<UserProfile />} />
+            </Route>
 
+            {/* AUTH LAYOUT */}
+            <Route path='/auth' element={<AuthLayout />} >
+                <Route index element={<Navigate to="register" />} />
 
-            </Routes>
-        </div>
+                <Route path='register' element={<RegisterPage />} />
+                <Route path='login' element={<LoginPage />} />
+            </Route>
+
+        </Routes>
     )
 }
 

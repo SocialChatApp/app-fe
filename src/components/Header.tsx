@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,6 +14,8 @@ import Container from '@mui/material/Container';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
+import '../App.css'
+
 
 const pages = ['Meet', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Settings', 'Logout'];
@@ -43,7 +45,10 @@ function Header() {
     };
 
     return (
-        <AppBar position="static" >
+        <AppBar position="static" style={{
+            backgroundColor: '#ADA2FF',
+            marginBottom: '20px'
+        }} >
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Link to='/' className='LinkButton'>
@@ -58,7 +63,7 @@ function Header() {
                                 fontFamily: 'monospace',
                                 fontWeight: 700,
                                 letterSpacing: '.3rem',
-                                color: 'inherit',
+                                color: '#FFE5F1',
                                 textDecoration: 'none',
                             }}
                         >
@@ -107,12 +112,12 @@ function Header() {
                                 <>
                                     <MenuItem onClick={handleCloseNavMenu}>
                                         <Link to="/auth/register" className='LinkButton'>
-                                            <Typography textAlign="center">Sign Up</Typography>
+                                            <Typography style={{ fontFamily: 'monospace' }} textAlign="center">Sign Up</Typography>
                                         </Link>
                                     </MenuItem>
                                     <MenuItem onClick={handleCloseNavMenu}>
                                         <Link to="/auth/login" className='LinkButton'>
-                                            <Typography textAlign="center">Sign In</Typography>
+                                            <Typography style={{ fontFamily: 'monospace' }} textAlign="center">Sign In</Typography>
                                         </Link>
                                     </MenuItem>
                                 </>
@@ -158,11 +163,11 @@ function Header() {
                             ))
                         ) : (
                             <Box>
-                                <Button color="inherit" onClick={() => {
+                                <Button color="inherit" style={{ fontFamily: 'monospace' }} onClick={() => {
                                     navigate('/auth/register');
                                 }}>Sign Up</Button>
 
-                                <Button color="inherit" onClick={() => {
+                                <Button color="inherit" style={{ fontFamily: 'monospace' }} onClick={() => {
                                     navigate('/auth/login')
                                 }}>Sign In</Button>
                             </Box>

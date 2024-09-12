@@ -1,15 +1,34 @@
 import { Box, Button, Divider, Grid, Typography } from '@mui/material';
-import photo from '../../assets/images/img1.jpg';
+import photo1 from '../../assets/images/file.png';
+import photo2 from '../../assets/images/People-showing.png';
 import votePhoto from '../../assets/images/vote.jpg';
 import UserComment from '../../components/UserComment';
-
+import '../../App.css'
 
 function MainPage() {
     console.log("main page")
     return (
-        <div>
-            <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-                <Grid item xs={6} style={{ margin: 0, padding: 0 }}>
+        <div className='Main-Layout'>
+            <Box
+                sx={{
+                    width: '80%',
+                    height: '300px',
+                    backgroundColor: '#ADA2FF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '10px',
+                    borderRadius: 10,
+                    marginBottom: 5
+                }}
+            >
+                <Box
+                    sx={{
+                        width: '40%',
+                        height: '100%',
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                    }}
+                >
                     <Box
                         component="img"
                         sx={{
@@ -17,36 +36,54 @@ function MainPage() {
                             height: '100%',
                             objectFit: 'cover',
                         }}
-                        src={photo}
+                        src={photo1}
+                        alt="Left Image"
                     />
-                </Grid>
+                </Box>
 
-                <Grid item xs={6} style={{ padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
-                    <Typography variant="h4" gutterBottom>
+                <Box
+                    sx={{
+                        width: '60%',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        //justifyContent: 'center', 
+                        paddingLeft: '20px',
+                        color: '#FFF8E1',
+                    }}
+                >
+                    <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
                         Welcome to Friend Fusion!
                     </Typography>
-                    <Typography variant="body1" paragraph>
+                    <Typography variant="body1" sx={{ fontSize: 17 }} >
                         Friend Fusion is the ultimate platform designed to connect you with new people from all around the world. Whether you're looking to make new friends, find someone with similar interests, or simply have a fun chat, Friend Fusion makes it happen!
                     </Typography>
-                    <Typography variant="body1" paragraph>
+                    <Typography variant="body1" sx={{ fontSize: 17, marginTop: 4 }}>
                         Our unique system randomly matches users for spontaneous and exciting conversations. No more awkward silences or dead-end chats—every three minutes, there's an opportunity for a community vote to remove unwanted participants, keeping your conversations lively and engaging.
                     </Typography>
-                    <Typography variant="body1" paragraph>
-                        You can join both public and private chats, depending on your preference. Share your favorite moments by posting photos on your profile. Premium members enjoy exclusive benefits such as the ability to comment on and respond to posts, making interactions even more meaningful.
-                    </Typography>
-                    <Typography variant="body1" paragraph>
-                        Ready to dive in? Friend Fusion is all about building genuine connections in a fun, safe, and dynamic environment. Don't miss out on the chance to be part of a vibrant community where every interaction is a new adventure.
-                    </Typography>
-                    <Button variant="contained" color="primary" style={{ width: '300px', alignSelf: 'center' }} sx={{ mt: 2 }}>
-                        Get Started
-                    </Button>
-                </Grid>
-
-                <Box sx={{ width: '100%', my: 1 }}>
-                    <Divider sx={{ bgcolor: 'grey.200', height: '2px' }} />
                 </Box>
+            </Box>
 
-                <Grid item xs={6} style={{ margin: 0, padding: 0 }}>
+            <Box
+                sx={{
+                    width: '80%',
+                    height: '300px',
+                    backgroundColor: '#ADA2FF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '10px',
+                    borderRadius: 10,
+                    marginBottom: 5
+                }}
+            >
+                <Box
+                    sx={{
+                        width: '40%',
+                        height: '100%',
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                    }}
+                >
                     <Box
                         component="img"
                         sx={{
@@ -54,50 +91,105 @@ function MainPage() {
                             height: '100%',
                             objectFit: 'cover',
                         }}
-                        src={votePhoto}
+                        src={photo2}
+                        alt="Left Image"
                     />
-                </Grid>
-
-                <Grid item xs={6} style={{ padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
-
-                    <Typography variant="body1" paragraph>
-                        At Friend Fusion, conversations start spontaneously as users are randomly placed into chat rooms. Every 5 minutes, a voting session occurs, allowing users to provide feedback on their chat experience. To initiate a voting session, there must be more than two users in the room.
-                    </Typography>
-                    <Typography variant="body1" paragraph>
-                        This system ensures that users who engage in harassment, disruptive behavior, or persistently discuss unwanted topics can be removed from the chat. By maintaining a respectful and enjoyable environment, Friend Fusion helps foster meaningful interactions and a positive community experience. Join us to be part of a dynamic and secure space where every conversation is a new opportunity to connect!
-                    </Typography>
-                </Grid>
-
-                <Box sx={{ width: '100%', my: 1 }}>
-                    <Divider sx={{ bgcolor: 'grey.200', height: '2px' }} />
                 </Box>
 
-                <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6} md={4}>
-                        <UserComment
-                            avatarLetter="A"
-                            date="August 7, 2024"
-                            comment="This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like."
-                        />
-                    </Grid>
+                <Box
+                    sx={{
+                        width: '60%',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        //justifyContent: 'center', 
+                        paddingLeft: '20px',
+                        color: '#FFF8E1',
+                        alignItems: 'center'
+                    }}
+                >
+                    <Typography variant="body1" sx={{ fontSize: 17 }} >
+                        You can join both public and private chats, depending on your preference. Share your favorite moments by posting photos on your profile. Premium members enjoy exclusive benefits such as the ability to comment on and respond to posts, making interactions even more meaningful.
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontSize: 17, marginTop: 4 }}>
+                        Ready to dive in? Friend Fusion is all about building genuine connections in a fun, safe, and dynamic environment. Don't miss out on the chance to be part of a vibrant community where every interaction is a new adventure.
+                    </Typography>
 
-                    <Grid item xs={12} sm={6} md={4}>
-                        <UserComment
-                            avatarLetter="A"
-                            date="August 7, 2024"
-                            comment="This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like."
-                        />
-                    </Grid>
+                    <Button sx={{
+                        width: 150,
+                        marginTop: 3,
+                        borderRadius: 10,
+                        backgroundColor: '#B5ADF4',
+                    }} variant="contained">Get Started</Button>
+                </Box>
+            </Box>
 
-                    <Grid item xs={12} sm={6} md={4}>
-                        <UserComment
-                            avatarLetter="A"
-                            date="August 7, 2024"
-                            comment="This impressive paella is a perfect party dish and a fun meal to cook together with your guests. Add 1 cup of frozen peas along with the mussels, if you like."
-                        />
-                    </Grid>
-                </Grid>
-            </Grid>
+
+            <Divider
+                sx={{
+                    width: '80%',
+                    borderBottomWidth: 2,
+                    marginY: 3,
+                    backgroundColor: '#FFE5F1',
+                }}
+            />
+
+            <Box
+                sx={{
+                    width: '80%',
+                    height: 'auto',
+                    padding: 2,
+                    borderRadius: 10,
+                }}
+            >
+
+                <Box
+                    sx={{
+                        backgroundColor: 'red'
+                    }}
+                >
+                    <Typography variant="h4" sx={{ fontWeight: 'bold', textAlign: 'center', mb: 4, color: '#FFF' }}>
+                        Üyelik Satışı
+                    </Typography>
+                </Box>
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        width: '100%',
+                    }}
+                >
+                    <Box
+                        sx={{
+                            width: '45%',
+                            height: 150,
+                            borderRadius: 10,
+                            backgroundColor: '#ADA2FF',
+                            padding: 2,
+                        }}
+                    >
+                        <Typography variant="body1" sx={{ color: '#FFF8E1' }}>
+                            Üyeliğinizi hemen yükseltin ve premium özelliklerden yararlanın. Sohbet odalarında öncelikli yer alın, profilinizde daha fazla fotoğraf paylaşın ve sınırsız mesajlaşmanın keyfini çıkarın.
+                        </Typography>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            width: '45%',
+                            height: 150,
+                            borderRadius: 10,
+                            backgroundColor: '#ADA2FF',
+                            padding: 2,
+                        }}
+                    >
+                        <Typography variant="body1" sx={{ color: '#FFF8E1' }}>
+                            Premium üyeler ayrıca özel sohbetlere katılabilir ve tüm içeriklere sınırsız erişim sağlayabilir. Şimdi üye olun ve ayrıcalıklı bir deneyim yaşayın!
+                        </Typography>
+                    </Box>
+                </Box>
+            </Box>
 
         </div>
     );
