@@ -4,6 +4,8 @@ import LoginPage from "./LoginPage";
 import { useState } from "react";
 import RegisterPage from "./RegisterPage";
 import TwoFactorAuth from "./TwoFactorAuth";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
 
 
 interface AuthPageProps {
@@ -30,7 +32,7 @@ function AuthPageContainer({ formType }: AuthPageProps) {
     return (
         // <Container maxWidth="lg" >
         <Box >
-
+            <Header />
             <Box width={"90%"} justifyContent="center" alignContent="center">
                 <Stack direction="row" spacing={{ xs: 1, sm: 2 }} justifyContent="center" alignItems="center">
                     <Box width="50%" visibility={{ xs: "hidden", sm: "visible" }}>
@@ -41,6 +43,7 @@ function AuthPageContainer({ formType }: AuthPageProps) {
                     </Box>
                 </Stack>
             </Box>
+            <Footer />
         </Box>
         // </Container>
     );

@@ -69,7 +69,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setForm }) => {
         }}>
 
             <Box width={{ xs: "100%", sm: "60%" }}>
-                <Typography variant="h2" gutterBottom align="center">
+                <Typography color='#ADA2FF' fontFamily='onton' variant="h2" gutterBottom align="center">
                     Sign in
                 </Typography>
                 <Stack spacing={2} direction="column">
@@ -97,13 +97,22 @@ const LoginPage: React.FC<LoginPageProps> = ({ setForm }) => {
                     <Button
                         variant="contained"
                         color="primary"
-                        style={{ marginTop: '20px' }}
+                        style={{ backgroundColor: '#ADA2FF', marginTop: '20px' }}
                         fullWidth
                         onClick={SignIn}
                     >
-                        {isLoading ? <CircularProgress color="inherit" /> : <Typography>Giriş</Typography>}
+                        {isLoading ? <CircularProgress color="inherit" /> : <Typography>Login</Typography>}
                     </Button>
-                    <Typography>Hesabın yok mu? <span onClick={() => { setForm('register') }}>kaydol</span> </Typography>
+                    <Typography>Don't you have account?
+                        <span
+                            style={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}
+                            onClick={() => {
+                                setForm('register')
+                            }}
+                        >
+                            Register
+                        </span>
+                    </Typography>
                 </Stack>
             </Box>
 

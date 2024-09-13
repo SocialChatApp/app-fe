@@ -74,7 +74,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ setForm }) => {
                     </Alert>
                 ) : (
                     <Box width={{ xs: "100%", sm: "60%" }}>
-                        <Typography variant="h4" gutterBottom align="center">
+                        <Typography color='#ADA2FF' fontFamily='onton' variant="h2" gutterBottom align="center">
                             Register
                         </Typography>
                         <Stack spacing={2} direction="column">
