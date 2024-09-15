@@ -13,11 +13,7 @@ import { useSelector } from 'react-redux';
 
 function RouterConfig() {
 
-    const userInfoFromStore = useSelector((store: RootState) => store.user);
-    const user = {
-        email: userInfoFromStore.info.email,
-        accessToken: userInfoFromStore.accessToken
-    };
+    const { info: user } = useSelector((store: RootState) => store.user);
 
     return (
         <Routes>
@@ -49,8 +45,7 @@ function RouterConfig() {
             <Route path='/auth' element={<AuthLayout />} >
                 <Route index element={<Navigate to="signin" />} />
 
-                <Route path='signin' element={<AuthPageContainer formType='register' />} />
-                <Route path='login' element={<AuthPageContainer formType='login' />} />
+                <Route path='signin' element={<AuthPageContainer />} />
             </Route>
 
         </Routes>

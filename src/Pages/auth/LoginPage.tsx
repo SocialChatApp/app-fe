@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { LoginDto } from '../../dto/LoginDto';
 import { AppDispatch, RootState } from '../../redux/store';
-import { loginUser } from '../../redux/userSlice';
+import { login } from '../../redux/authSlice';
 
 interface LoginPageProps {
     setForm: React.Dispatch<React.SetStateAction<'login' | 'register' | '2FA'>>;
@@ -15,7 +15,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setForm }) => {
     // const { setForm } = props;
 
     const dispatch = useDispatch<AppDispatch>();
-    const { isLoading } = useSelector((store: RootState) => store.user);
+    const { isLoading } = useSelector((store: RootState) => store.auth);
 
     const navigate = useNavigate();
 
@@ -48,7 +48,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ setForm }) => {
         }
 
         try {
-            const loginResult = await dispatch(loginUser(formData));
+            const loginResult = await dispatch(login(formData));
             if (loginResult.payload) {
                 navigate('/meet-page');
             }

@@ -1,9 +1,13 @@
 import React from 'react';
 import { Box, Typography, IconButton } from '@mui/material';
 import { Facebook, Twitter, Instagram, LinkedIn } from '@mui/icons-material';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 function Footer() {
+
+    const navigate = useNavigate();
+
     return (
         <Box
             sx={{
@@ -25,9 +29,11 @@ function Footer() {
                 </Typography>
             </Box>
             <Box sx={{ flexGrow: 150, display: 'flex', justifyContent: 'center' }}>
-                <Typography variant="body2" sx={{ color: '#FFE5F1', fontSize: 25 }}>
-                    Friend Fusion
-                </Typography>
+                <Link to='/' className='LinkButton'>
+                    <Typography variant="body2" sx={{ color: '#FFE5F1', fontSize: 25 }}>
+                        Friend Fusion
+                    </Typography>
+                </Link>
             </Box>
             <Box>
                 <IconButton color="primary" aria-label="facebook">

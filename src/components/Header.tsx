@@ -23,7 +23,8 @@ const settings = ['Profile', 'Settings', 'Logout'];
 function Header() {
     const navigate = useNavigate();
     // const [isAuth, setAuth] = useState(false);
-    const { isAuth, info: user } = useSelector((state: RootState) => state.user);
+    const { info: user } = useSelector((state: RootState) => state.user);
+    const { isAuth } = useSelector((store: RootState) => store.auth);
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -110,13 +111,13 @@ function Header() {
                                 ))
                             ) : (
                                 <>
-                                    <MenuItem onClick={handleCloseNavMenu}>
+                                    {/* <MenuItem onClick={handleCloseNavMenu}>
                                         <Link to="/auth/register" className='LinkButton'>
                                             <Typography style={{ fontFamily: 'monospace' }} textAlign="center">Sign Up</Typography>
                                         </Link>
-                                    </MenuItem>
+                                    </MenuItem> */}
                                     <MenuItem onClick={handleCloseNavMenu}>
-                                        <Link to="/auth/login" className='LinkButton'>
+                                        <Link to="/auth/signin" className='LinkButton'>
                                             <Typography style={{ fontFamily: 'monospace' }} textAlign="center">Sign In</Typography>
                                         </Link>
                                     </MenuItem>
@@ -163,12 +164,12 @@ function Header() {
                             ))
                         ) : (
                             <Box>
-                                <Button color="inherit" style={{ fontFamily: 'monospace' }} onClick={() => {
+                                {/* <Button color="inherit" style={{ fontFamily: 'monospace' }} onClick={() => {
                                     navigate('/auth/signin');
-                                }}>Sign Up</Button>
+                                }}>Sign Up</Button> */}
 
                                 <Button color="inherit" style={{ fontFamily: 'monospace' }} onClick={() => {
-                                    navigate('/auth/login')
+                                    navigate('/auth/signin')
                                 }}>Sign In</Button>
                             </Box>
                         )}

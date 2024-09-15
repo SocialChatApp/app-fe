@@ -20,7 +20,7 @@ export const fetchAllPosts = createAsyncThunk(
     'post/fetchAllPosts',
     async (_, { getState }) => {
         const state = getState() as RootState;
-        const accessToken = state.user.accessToken;
+        const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
         const uri = `http://localhost:3000/post/${state.user.info.id}`;
 
@@ -34,7 +34,7 @@ export const createPost = createAsyncThunk<CreatePostDto, CreatePostDto>(
     async (postObj, { getState }) => {
 
         const state = getState() as RootState;
-        const accessToken = state.user.accessToken;
+        const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
 
         const uri = `http://localhost:3000/post/`;
@@ -48,7 +48,7 @@ export const updatePost = createAsyncThunk<UpdatePostDto, { postId: string; post
     async ({ postId, postObj }, { getState }) => {
 
         const state = getState() as RootState;
-        const accessToken = state.user.accessToken;
+        const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
 
         const uri = `http://localhost:3000/post/${postId}`;
@@ -75,7 +75,7 @@ export const deletePost = createAsyncThunk(
     "post/deletePost",
     async (postId: string, { getState }) => {
         const state = getState() as RootState;
-        const accessToken = state.user.accessToken;
+        const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
         const url = `http://localhost:3000/post/${postId}`;
         await axios.delete(url, { headers });

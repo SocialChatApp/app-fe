@@ -1,8 +1,10 @@
 import { Box, Button, CircularProgress, Stack, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
+import { redirect, useNavigate } from 'react-router-dom';
+import { verifyToken } from '../../redux/authSlice';
+import { VerificationDto } from '../../dto/VerificationDto';
 
 interface TwoFactorAuthProps {
     setForm: React.Dispatch<React.SetStateAction<'login' | 'register' | '2FA'>>;
@@ -10,9 +12,11 @@ interface TwoFactorAuthProps {
 
 const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({ setForm }) => {
 
-    const { isLoading } = useSelector((store: RootState) => store.user);
+    const { isLoading, userInf: userInfoCache } = useSelector((store: RootState) => store.auth);
 
     const [formData, setFormData] = useState<string>("");
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -37,6 +41,22 @@ const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({ setForm }) => {
 
         try {
             //TODO: do it something here sukkkk
+            //TODOLUYORUM RAMSSSSSSSSSSSSSSSS TISSSSSSSSSSS
+
+            if (userInfoCache) {
+                const verificationDto: VerificationDto = {
+                    mail: userInfoCache.email,
+                    token: parseInt(formData)
+                };
+
+                const response = await dispatch(verifyToken(verificationDto));
+                if (response.payload as true) {
+                    console.log("GİRİŞ BAŞARILI");
+                    navigate('/');
+                }
+            }
+
+
         } catch (error) {
             console.error('Error signing up user:', error);
         }

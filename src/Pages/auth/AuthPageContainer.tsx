@@ -1,20 +1,25 @@
 import { Box, Stack } from "@mui/material";
 import Banner from "../../components/Auth/Banner";
 import LoginPage from "./LoginPage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RegisterPage from "./RegisterPage";
 import TwoFactorAuth from "./TwoFactorAuth";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 
-interface AuthPageProps {
-    formType: 'login' | 'register' | '2FA';
-}
+function AuthPageContainer() {
 
-function AuthPageContainer({ formType }: AuthPageProps) {
+    const { authPage } = useSelector((store: RootState) => store.auth)
 
-    const [form, setForm] = useState<'login' | 'register' | '2FA'>(formType);
+    useEffect(() => {
+        setForm(authPage);
+    }, [authPage]);
+
+
+    const [form, setForm] = useState<'login' | 'register' | '2FA'>(authPage);
     const renderForm = () => {
         switch (form) {
             case 'login':
@@ -23,7 +28,6 @@ function AuthPageContainer({ formType }: AuthPageProps) {
                 return <RegisterPage setForm={setForm} />;
             case '2FA':
                 return <TwoFactorAuth setForm={setForm} />;
-
             default:
                 return <LoginPage setForm={setForm} />;
 
@@ -32,7 +36,6 @@ function AuthPageContainer({ formType }: AuthPageProps) {
     return (
         // <Container maxWidth="lg" >
         <Box >
-            <Header />
             <Box width={"90%"} justifyContent="center" alignContent="center">
                 <Stack direction="row" spacing={{ xs: 1, sm: 2 }} justifyContent="center" alignItems="center">
                     <Box width="50%" visibility={{ xs: "hidden", sm: "visible" }}>
