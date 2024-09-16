@@ -99,6 +99,8 @@ export const authSlice = createSlice({
             state.accessToken = action.payload.AccesToken;
             state.isLoading = false;
             console.log('LOGIN ISLEMI YAPILDI');
+            console.log(state.accessToken);
+
         }), builder.addCase(login.pending, (state) => {
             state.isLoading = true;
 

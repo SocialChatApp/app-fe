@@ -13,13 +13,13 @@ import { useSelector } from 'react-redux';
 
 function RouterConfig() {
 
-    const { info: user } = useSelector((store: RootState) => store.user);
+    const { userInf: user } = useSelector((store: RootState) => store.auth);
 
     return (
         <Routes>
             {/* MAIN LAYOUT */}
             <Route path='*' element={<Navigate to="/" />} />
-            <Route path='/' element={<Navigate to={user ? "/home/welcome" : "/auth/login"} replace />} />
+            <Route path='/' element={<Navigate to={user ? "/home/welcome" : "/auth/signin"} replace />} />
 
             <Route path="/home" element={<MainLayout />} >
                 <Route index element={<Navigate to="welcome" />} />
