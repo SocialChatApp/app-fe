@@ -17,8 +17,8 @@ import { RootState } from '../redux/store';
 import '../App.css'
 
 
-const pages = ['Meet', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Settings', 'Logout'];
+const pages = ['Start Meeting', 'About', 'Contact'];
+const settings = ['User', 'Settings', 'Logout'];
 
 function Header() {
     const navigate = useNavigate();
@@ -201,7 +201,7 @@ function Header() {
                                 >
                                     {settings.map((setting) => (
                                         <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                            <Link to={"user/" + setting.toLowerCase()} className='LinkButton'>
+                                            <Link to={setting.toLowerCase()} className='LinkButton'>
                                                 <Typography textAlign="center">{setting}</Typography>
                                             </Link>
                                         </MenuItem>

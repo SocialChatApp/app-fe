@@ -7,14 +7,28 @@
 
 
 #root {
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
+
+main {
+  flex: 1;
+}
+
+
 
 body {
   background-color: #FFF8E1;
 }
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 
 .RegisterTable {
   border-width: 1px;

@@ -1,13 +1,9 @@
-import React from 'react';
 import { Box, Typography, IconButton } from '@mui/material';
 import { Facebook, Twitter, Instagram, LinkedIn } from '@mui/icons-material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 function Footer() {
-
-    const navigate = useNavigate();
-
     return (
         <Box
             sx={{

@@ -13,7 +13,7 @@ const AUTH_URL = "http://localhost:3000/auth";
 
 export interface LogicOperation {
     authPage: '2FA' | 'register' | 'login';
-    userInf: CreateUserDto | undefined;
+    userInf: CreateUserDto;
     userCreated: boolean;
     accessToken: string;
     isAuth: boolean;
@@ -23,7 +23,16 @@ export interface LogicOperation {
 
 const initialState: LogicOperation = {
     authPage: "login",
-    userInf: undefined,
+    userInf: {
+        id: '',
+        name: '',
+        surname: '',
+        email: '',
+        password: '',
+        role: '',
+        searchType: '',
+        avatarUrl: ''
+    },
     userCreated: false,
     accessToken: "",
     isAuth: false,

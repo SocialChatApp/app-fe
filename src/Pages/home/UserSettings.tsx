@@ -9,7 +9,7 @@ import { updateUser, uploadAvatar } from '../../redux/userSlice';
 // import { UpdateUserDto } from '../dto/UpdateUserDto';
 
 function UserSettings() {
-    const { info: user } = useSelector((store: RootState) => store.user);
+    const { userInf: user } = useSelector((store: RootState) => store.auth);
 
     const [formData, setFormData] = useState({ ...user });
 

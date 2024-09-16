@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import RegisterPage from "./RegisterPage";
 import TwoFactorAuth from "./TwoFactorAuth";
 import Footer from "../../components/Footer";
-import Header from "../../components/Header";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
