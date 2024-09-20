@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Box, List, ListItem, Typography, TextField, Button, Stack, Tooltip, IconButton } from '@mui/material';
+import { Box, List, ListItem, Typography, TextField, Button, Stack, Tooltip, IconButton, Avatar } from '@mui/material';
 import { Socket } from 'socket.io-client';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 interface RoomPageProps {
     socket: Socket;
@@ -9,39 +11,50 @@ interface RoomPageProps {
 }
 
 
+
 function RoomPage({ setForm, socket }: RoomPageProps) {
 
-    const [users, setUsers] = useState<string[]>([]);
+    const [users, setUsers] = useState<{ name: string; avatarUrl: string; id: string }[]>([]);
+
     const [roomName, setRoomName] = useState<string>("");
 
     const [clientMessage, setClientMessage] = useState<string>('');
 
-    const [messageList, setMessageList] = useState<string[]>([]);
+    const [messageList, setMessageList] = useState<{ name: string; avatarUrl: string; message: string; }[]>([]);
+
+    const { info: userInfo } = useSelector((store: RootState) => store.user);
 
     useEffect(() => {
 
-        socket.on('roomInfo', (data: { roomName: string, users: string[] }) => {
+        socket.on('roomInfo', (data) => {
             setRoomName(data.roomName);
             setUsers(data.users);
 
-            console.log('ROM INFO UPDATE');
-
+            console.log('Room Info Update:', data);
         });
 
-        socket.on('NewUserJoined', (user: string) => {
-            setUsers(prevUsers => [...prevUsers, user]);
+        socket.on('NewUserJoined', (user: { name: string; avatarUrl: string; id: string }) => {
+            if (socket.id !== user.id)
+                setUsers(prevUsers => [...prevUsers, user]); // Artık kullanıcıyı id ile tanımlayabiliyoruz
         });
 
-        socket.on('user-left', (user: string) => {
-            setUsers((prevUsers) => prevUsers.filter((u) => u !== user));
+        socket.on('user-left', (clientId: string) => {
+            console.log(`USER LEAEV ${clientId}`);
+            console.log(users);
+            setUsers(prevUsers => prevUsers.filter(u => u.id !== clientId)); // Kullanıcıyı id ile filtrele
         });
 
-        socket.on('message', (payload: { sender: string, message: string }) => {
+        socket.on('message', (payload: { sender: string, avatarUrl: string, message: string }) => {
 
             setMessageList((prevMessageList) => [
                 ...prevMessageList,
-                `${payload.sender}: ${payload.message}`
+                {
+                    name: payload.sender,
+                    avatarUrl: payload.avatarUrl,
+                    message: payload.message,
+                },
             ]);
+
         });
 
 
@@ -62,7 +75,8 @@ function RoomPage({ setForm, socket }: RoomPageProps) {
 
         const payload = {
             roomName,
-            sender: socket.id,
+            sender: userInfo.name,
+            avatarUrl: userInfo.avatarUrl,
             message: clientMessage
         };
 
@@ -122,10 +136,11 @@ function RoomPage({ setForm, socket }: RoomPageProps) {
                                 boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
                                 borderRadius: '4px',
                                 marginBottom: 1,
-                                justifyContent: 'center'
+                                justifyContent: 'flex-start' // Soldan başlayacak şekilde ayarlandı
                             }}
                         >
-                            {user}
+                            <Avatar src={user.avatarUrl} alt={user.name} sx={{ marginRight: 2 }} /> {/* Avatar */}
+                            {user.name} {/* Kullanıcı ismi */}
                         </ListItem>
                     ))}
                 </List>
@@ -153,9 +168,19 @@ function RoomPage({ setForm, socket }: RoomPageProps) {
                     }}
                 >
                     {messageList.map((msg, index) => (
-                        <Typography key={index} variant="body1">
-                            {msg}
-                        </Typography>
+                        <Box
+                            key={index}
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                marginBottom: 1,
+                            }}
+                        >
+                            <Avatar src={msg.avatarUrl} alt={msg.name} sx={{ marginRight: 2 }} /> {/* Avatar */}
+                            <Typography variant="body1" sx={{ wordWrap: 'break-word' }}>
+                                {msg.message}
+                            </Typography>
+                        </Box>
                     ))}
                 </Box>
 

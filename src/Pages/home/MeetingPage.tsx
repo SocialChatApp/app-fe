@@ -13,12 +13,19 @@ let socket: Socket;
 function MeetingPage() {
     const [loading, setLoading] = useState<boolean>(true);
 
+    const { info: user } = useSelector((store: RootState) => store.user);
+
     useEffect(() => {
 
         socket = io('http://localhost:4000');
 
         socket.on('connect', () => {
             setLoading(false);
+            const userInfo = {
+                name: user.name,
+                avatarUrl: user.avatarUrl,
+            };
+            socket.emit('setUserInfo', userInfo);
         });
 
         return () => {
