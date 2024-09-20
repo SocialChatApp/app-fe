@@ -1,7 +1,8 @@
-import { PayloadAction, Update, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { CreateUserDto } from '../dto/CreateUserDto'
 import axios from 'axios';
 import { UpdateUserDto } from '../dto/UpdateUserDto';
+import { RootState } from './store';
 
 const BASE_URL = "http://localhost:3000/users";
 
@@ -42,15 +43,21 @@ export const createUser = createAsyncThunk<CreateUserDto, CreateUserDto>(
 
 export const uploadAvatar = createAsyncThunk(
     "user/uploadAvatar",
-    async ({ img, userId }: { img: File, userId: string }) => {
+    async ({ img, userId }: { img: File, userId: string }, { getState }) => {
+
+        const state = getState() as RootState;
+        const accessToken = state.auth.accessToken;
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data',
+
+        };
+
         const formData = new FormData();
         formData.append('file', img);
         const url = `http://localhost:3000/cloud-storage/user/${userId}`;
-        const response = await axios.post(url, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        const response = await axios.post(url, formData, { headers });
+
         return response.data;
     }
 );
@@ -58,8 +65,13 @@ export const uploadAvatar = createAsyncThunk(
 
 export const updateUser = createAsyncThunk<CreateUserDto, { userId: string; userObj: UpdateUserDto }>(
     "user/updateUser",
-    async ({ userId, userObj }) => {
-        const response = await axios.patch(`${BASE_URL}/${userId}`, userObj);
+    async ({ userId, userObj }, { getState }) => {
+
+        const state = getState() as RootState;
+        const accessToken = state.auth.accessToken;
+        const headers = { Authorization: `Bearer ${accessToken}` };
+
+        const response = await axios.patch(`${BASE_URL}/${userId}`, userObj, { headers });
         await fetchUserInfo(userId);
         return response.data;
     }
@@ -67,8 +79,13 @@ export const updateUser = createAsyncThunk<CreateUserDto, { userId: string; user
 
 export const fetchUserInfo = createAsyncThunk<CreateUserDto, string>(
     "user,fetchUser",
-    async (userId) => {
-        const response = await axios.get(`${BASE_URL}/${userId}`);
+    async (userId, { getState }) => {
+
+        const state = getState() as RootState;
+        const accessToken = state.auth.accessToken;
+        const headers = { Authorization: `Bearer ${accessToken}` };
+
+        const response = await axios.get(`${BASE_URL}/${userId}`, { headers });
         return response.data;
     }
 )
@@ -79,7 +96,7 @@ export const userSlice = createSlice({
     reducers: {
         setUser(state, action: PayloadAction<CreateUserDto>) {
             state.info = action.payload;
-        },
+        }
     },
     extraReducers(builder) {
 

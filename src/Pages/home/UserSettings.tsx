@@ -42,7 +42,7 @@ function UserSettings() {
             (selectedFile !== null && imagePreview !== user.avatarUrl);
 
         setIsFormChanged(isChanged);
-    }, [formData, selectedFile, imagePreview, user]);
+    }, [formData, selectedFile, imagePreview, user, user.avatarUrl]);
 
     const dispatch = useDispatch<AppDispatch>();
 

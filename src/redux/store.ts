@@ -2,13 +2,14 @@ import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './userSlice'
 import postReducer from './postSlice'
 import authReducer from './authSlice'
-
+import commentReducer from './commentSlice'
 
 export const store = configureStore({
     reducer: {
         user: userReducer,
         post: postReducer,
-        auth: authReducer
+        auth: authReducer,
+        comment: commentReducer
     },
 })
 

@@ -17,14 +17,36 @@ import { RootState } from '../redux/store';
 import '../App.css'
 
 
-const pages = ['Meeting', 'About', 'Contact'];
-const settings = ['User', 'Settings', 'Logout'];
+const pages = ['Meeting'];
+const settings: PageData[] = [
+    {
+        name: 'Profile',
+        path: 'user'
+    },
+    {
+        name: 'Settings',
+        path: 'settings'
+    },
+    {
+        name: 'Logout',
+        path: 'logout'
+    }
+];
+
+interface PageData {
+    name: string;
+    path: string;
+}
 
 function Header() {
     const navigate = useNavigate();
     // const [isAuth, setAuth] = useState(false);
     const { isAuth } = useSelector((store: RootState) => store.auth);
     const { info: user } = useSelector((store: RootState) => store.user);
+
+    useEffect(() => {
+
+    }, [user]);
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -199,9 +221,9 @@ function Header() {
                                     onClose={handleCloseUserMenu}
                                 >
                                     {settings.map((setting) => (
-                                        <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                            <Link to={setting.toLowerCase()} className='LinkButton'>
-                                                <Typography textAlign="center">{setting}</Typography>
+                                        <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
+                                            <Link to={setting.path.toLowerCase()} className='LinkButton'>
+                                                <Typography textAlign="center">{setting.name}</Typography>
                                             </Link>
                                         </MenuItem>
                                     ))}

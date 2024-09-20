@@ -19,10 +19,11 @@ const initialState: InitialState = {
 export const fetchAllPosts = createAsyncThunk(
     'post/fetchAllPosts',
     async (_, { getState }) => {
+
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
-        const uri = `http://localhost:3000/post/${state.user.info.id}`;
+        const uri = `http://localhost:3000/post/user/${state.user.info.id}`;
 
         const response = await axios.get(uri, { headers });
         return response.data;
@@ -60,11 +61,21 @@ export const updatePost = createAsyncThunk<UpdatePostDto, { postId: string; post
 
 export const uploadPostImage = createAsyncThunk(
     "post/uploadPostImage",
-    async ({ img, postId }: { img: File, postId: string }) => {
+    async ({ img, postId }: { img: File, postId: string }, { getState }) => {
+
+        const state = getState() as RootState;
+        const accessToken = state.auth.accessToken;
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'multipart/form-data',
+
+        };
+
+
         const formData = new FormData();
         formData.append('file', img);
         const url = `http://localhost:3000/cloud-storage/posts/${postId}`;
-        const response = await axios.post(url, formData);
+        const response = await axios.post(url, formData, { headers });
         console.log(response.data);
         return response.data;
     }
@@ -74,9 +85,11 @@ export const uploadPostImage = createAsyncThunk(
 export const deletePost = createAsyncThunk(
     "post/deletePost",
     async (postId: string, { getState }) => {
+
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
+
         const url = `http://localhost:3000/post/${postId}`;
         await axios.delete(url, { headers });
         return postId;

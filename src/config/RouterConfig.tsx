@@ -9,6 +9,7 @@ import UserSettings from '../Pages/home/UserSettings';
 import MeetingPage from '../Pages/home/MeetingPage';
 import { RootState } from '../redux/store';
 import { useSelector } from 'react-redux';
+import CreatePost from '../components/CreatePost';
 
 
 function RouterConfig() {
@@ -35,10 +36,19 @@ function RouterConfig() {
                         <UserSettings />
                     </Guard>
                 } />
+                <Route path='create-post' element={
+                    <Guard>
+                        <CreatePost />
+                    </Guard>
+                } />
 
                 {/* MAIN LAYOUT - PUBLIC PAGES */}
                 <Route path='welcome' element={<MainPage />} />
-                <Route path='user' element={<UserProfile />} />
+                <Route path='user' element={
+                    <Guard>
+                        <UserProfile />
+                    </Guard>
+                } />
             </Route>
 
             {/* AUTH LAYOUT */}
