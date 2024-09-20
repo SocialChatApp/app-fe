@@ -5,7 +5,7 @@ import axios from 'axios';
 import { CreateUserDto } from "../dto/CreateUserDto";
 import { EmailDto } from "../dto/EmailDto";
 import { VerificationDto } from "../dto/VerificationDto";
-import { createUser, updateUser } from "./userSlice";
+import { createUser, setUser, updateUser } from "./userSlice";
 
 
 const AUTH_URL = "http://localhost:3000/auth";
@@ -84,14 +84,16 @@ export const login = createAsyncThunk<LoginResult, LoginDto>(
 );
 
 export const GetMe = createAsyncThunk<CreateUserDto, { Authorization: string }>(
-    '',
+    'auth/me',
     async (obj, { dispatch }) => {
         const response = await axios.get(`${AUTH_URL}/me`, {
             headers: {
                 Authorization: obj.Authorization,
             },
         });
-        await dispatch(updateUser(response.data));
+
+        dispatch(setUser(response.data as CreateUserDto));
+        //await dispatch(updateUser(response.data));
         return response.data as CreateUserDto;
     }
 );

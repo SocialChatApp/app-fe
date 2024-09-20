@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -17,14 +17,14 @@ import { RootState } from '../redux/store';
 import '../App.css'
 
 
-const pages = ['Start Meeting', 'About', 'Contact'];
+const pages = ['Meeting', 'About', 'Contact'];
 const settings = ['User', 'Settings', 'Logout'];
 
 function Header() {
     const navigate = useNavigate();
     // const [isAuth, setAuth] = useState(false);
-    const { info: user } = useSelector((state: RootState) => state.user);
     const { isAuth } = useSelector((store: RootState) => store.auth);
+    const { info: user } = useSelector((store: RootState) => store.user);
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -48,7 +48,6 @@ function Header() {
     return (
         <AppBar position="static" style={{
             backgroundColor: '#ADA2FF',
-            marginBottom: '20px'
         }} >
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
@@ -180,7 +179,7 @@ function Header() {
                             <>
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                        <Avatar alt="User" src={user.avatarUrl} />
+                                        <Avatar src={`${user.avatarUrl}?t=${new Date().getTime()}`} />
                                     </IconButton>
                                 </Tooltip>
                                 <Menu

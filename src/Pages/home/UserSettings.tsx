@@ -9,7 +9,7 @@ import { updateUser, uploadAvatar } from '../../redux/userSlice';
 // import { UpdateUserDto } from '../dto/UpdateUserDto';
 
 function UserSettings() {
-    const { userInf: user } = useSelector((store: RootState) => store.auth);
+    const { info: user } = useSelector((store: RootState) => store.user);
 
     const [formData, setFormData] = useState({ ...user });
 
@@ -63,7 +63,7 @@ function UserSettings() {
         }
 
         if (user.id)
-            dispatch(updateUser({
+            await dispatch(updateUser({
                 userId: user.id,
                 userObj: updateUserDto
             }));

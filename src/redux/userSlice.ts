@@ -27,6 +27,8 @@ const initialState: User = {
 
 
 
+
+
 export const createUser = createAsyncThunk<CreateUserDto, CreateUserDto>(
     'user/createUser',
     async (userObj) => {
@@ -49,7 +51,6 @@ export const uploadAvatar = createAsyncThunk(
                 'Content-Type': 'multipart/form-data',
             },
         });
-        console.log(response.data);
         return response.data;
     }
 );
@@ -59,15 +60,26 @@ export const updateUser = createAsyncThunk<CreateUserDto, { userId: string; user
     "user/updateUser",
     async ({ userId, userObj }) => {
         const response = await axios.patch(`${BASE_URL}/${userId}`, userObj);
+        await fetchUserInfo(userId);
         return response.data;
     }
 );
+
+export const fetchUserInfo = createAsyncThunk<CreateUserDto, string>(
+    "user,fetchUser",
+    async (userId) => {
+        const response = await axios.get(`${BASE_URL}/${userId}`);
+        return response.data;
+    }
+)
 
 export const userSlice = createSlice({
     name: 'userSlice',
     initialState,
     reducers: {
-
+        setUser(state, action: PayloadAction<CreateUserDto>) {
+            state.info = action.payload;
+        },
     },
     extraReducers(builder) {
 
@@ -79,7 +91,7 @@ export const userSlice = createSlice({
             state.isSignUp = false;
         })
 
-        builder.addCase(uploadAvatar.fulfilled, (state, action) => {
+        builder.addCase(uploadAvatar.fulfilled, (state, action: PayloadAction<string>) => {
             state.info.avatarUrl = action.payload;
         }).addCase(uploadAvatar.pending, () => {
         }).addCase(uploadAvatar.rejected, (state, action) => {
@@ -87,6 +99,10 @@ export const userSlice = createSlice({
         })
 
         builder.addCase(updateUser.fulfilled, (state, action: PayloadAction<CreateUserDto>) => {
+            // NO CONTENT RETURN FROM API
+        })
+
+        builder.addCase(fetchUserInfo.fulfilled, (state, action: PayloadAction<CreateUserDto>) => {
             state.info = action.payload;
         })
     }
@@ -94,6 +110,6 @@ export const userSlice = createSlice({
 )
 
 // Action creators are generated for each case reducer function
-export const { } = userSlice.actions
+export const { setUser } = userSlice.actions
 
 export default userSlice.reducer

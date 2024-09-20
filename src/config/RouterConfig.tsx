@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux';
 
 function RouterConfig() {
 
-    const { userInf: user } = useSelector((store: RootState) => store.auth);
+    const { info: user } = useSelector((store: RootState) => store.user);
 
     return (
         <Routes>
