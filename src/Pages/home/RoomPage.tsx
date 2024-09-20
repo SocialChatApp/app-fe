@@ -10,8 +10,6 @@ interface RoomPageProps {
     setForm: React.Dispatch<React.SetStateAction<'lobby' | 'InRoom'>>;
 }
 
-
-
 function RoomPage({ setForm, socket }: RoomPageProps) {
 
     const [users, setUsers] = useState<{ name: string; avatarUrl: string; id: string }[]>([]);
@@ -35,13 +33,13 @@ function RoomPage({ setForm, socket }: RoomPageProps) {
 
         socket.on('NewUserJoined', (user: { name: string; avatarUrl: string; id: string }) => {
             if (socket.id !== user.id)
-                setUsers(prevUsers => [...prevUsers, user]); // Artık kullanıcıyı id ile tanımlayabiliyoruz
+                setUsers(prevUsers => [...prevUsers, user]);
         });
 
         socket.on('user-left', (clientId: string) => {
             console.log(`USER LEAEV ${clientId}`);
             console.log(users);
-            setUsers(prevUsers => prevUsers.filter(u => u.id !== clientId)); // Kullanıcıyı id ile filtrele
+            setUsers(prevUsers => prevUsers.filter(u => u.id !== clientId));
         });
 
         socket.on('message', (payload: { sender: string, avatarUrl: string, message: string }) => {
@@ -83,10 +81,6 @@ function RoomPage({ setForm, socket }: RoomPageProps) {
         socket.emit('message', payload);
 
         setClientMessage('');
-    }
-
-    const handleMessage = (data: { sender: string, message: string }) => {
-
     }
 
     return (

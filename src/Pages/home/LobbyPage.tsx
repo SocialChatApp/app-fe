@@ -29,7 +29,6 @@ function LobbyPage({ setForm, socket }: LobbyProps) {
     const createRoom = () => {
         if (newRoomName.trim()) {
             socket?.emit("createRoom", newRoomName);
-            //odayı oluşturduktan sonra main page'e dön
             setNewRoomName('');
             setShowCreateRoom(false);
             setForm('InRoom');
