@@ -16,6 +16,9 @@ const initialState: InitialState = {
     isLoading: false
 };
 
+const BASE_URL = "http://localhost:3000/post/";
+const CLOUD_STORAGE_BASE_URL = "http://localhost:3000/cloud-storage/posts/";
+
 export const fetchAllPosts = createAsyncThunk(
     'post/fetchAllPosts',
     async (_, { getState }) => {
@@ -23,7 +26,8 @@ export const fetchAllPosts = createAsyncThunk(
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
-        const uri = `http://localhost:3000/post/user/${state.user.info.id}`;
+
+        const uri = `${BASE_URL}user/${state.user.info.id}`;
 
         const response = await axios.get(uri, { headers });
         return response.data;
@@ -38,8 +42,7 @@ export const createPost = createAsyncThunk<CreatePostDto, CreatePostDto>(
         const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
 
-        const uri = `http://localhost:3000/post/`;
-        const response = await axios.post(uri, postObj, { headers });
+        const response = await axios.post(BASE_URL, postObj, { headers });
         return response.data;
     }
 );
@@ -52,7 +55,7 @@ export const updatePost = createAsyncThunk<UpdatePostDto, { postId: string; post
         const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
 
-        const uri = `http://localhost:3000/post/${postId}`;
+        const uri = `${BASE_URL}${postId}`;
         const response = await axios.patch(uri, postObj, { headers });
         return response.data;
     }
@@ -74,7 +77,7 @@ export const uploadPostImage = createAsyncThunk(
 
         const formData = new FormData();
         formData.append('file', img);
-        const url = `http://localhost:3000/cloud-storage/posts/${postId}`;
+        const url = `${CLOUD_STORAGE_BASE_URL}${postId}`;
         const response = await axios.post(url, formData, { headers });
         console.log(response.data);
         return response.data;
@@ -90,7 +93,7 @@ export const deletePost = createAsyncThunk(
         const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
 
-        const url = `http://localhost:3000/post/${postId}`;
+        const url = `${BASE_URL}${postId}`;
         await axios.delete(url, { headers });
         return postId;
     }

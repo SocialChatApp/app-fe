@@ -7,7 +7,6 @@ import { AppDispatch, RootState } from '../redux/store';
 import { createPost, updatePost, uploadPostImage } from '../redux/postSlice';
 import { UpdatePostDto } from '../dto/UpdatePostDto';
 import CheckIcon from '@mui/icons-material/Check';
-import { useNavigate } from 'react-router-dom';
 
 
 function CreatePost() {
@@ -23,7 +22,7 @@ function CreatePost() {
         status: StatusType.Draft,
         createAt: new Date(),
         imageUrl: '',
-        likes: 0,
+        likeCount: 0,
         comments: 0,
     });
 
@@ -32,7 +31,6 @@ function CreatePost() {
     const [isSavePost, setIsSavingPost] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate();
 
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

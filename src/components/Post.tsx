@@ -34,27 +34,24 @@ function Post(postProp: CreatePostDto) {
     const [commentCount, setCommentCount] = useState(0);
     const [commentsWithUserInfo, setCommentsWithUserInfo] = useState<{ comment: CommentInfoDto; userInfo: CreateUserDto | null }[]>([]);
 
-    // Yorumları çekmek için kullanılan fonksiyon
     const fetchComments = async () => {
         try {
             const action = await dispatch(fetchAllComments(postProp.id));
             if (fetchAllComments.fulfilled.match(action)) {
                 const comments: CommentInfoDto[] = action.payload;
 
-                // Kullanıcı bilgilerini almak için fetchUserInfo'yu çağırıyoruz
                 const userInfos = await Promise.all(
                     comments.map(async (comment) => {
                         const userInfoAction = await dispatch(fetchUserInfo(comment.userId));
                         if (fetchUserInfo.fulfilled.match(userInfoAction)) {
-                            return userInfoAction.payload; // Kullanıcı bilgilerini döndür
+                            return userInfoAction.payload;
                         } else {
                             console.error("Kullanıcı bilgileri alınırken hata oluştu:", userInfoAction.error);
-                            return null; // Hata durumunda null döndür
+                            return null;
                         }
                     })
                 );
 
-                // Kullanıcı bilgilerini yorumlarla birleştirme
                 const commentsWithUserInfo = comments.map((comment, index) => ({
                     comment,
                     userInfo: userInfos[index],
@@ -71,7 +68,7 @@ function Post(postProp: CreatePostDto) {
     };
 
     useEffect(() => {
-        fetchComments(); // Yorumları başlangıçta çek
+        fetchComments();
     }, [dispatch, postProp.id]);
 
     const handleDelete = async () => {
@@ -96,7 +93,7 @@ function Post(postProp: CreatePostDto) {
         if (response) {
             handleClose();
             setComment('');
-            await fetchComments(); // Yeni yorumu ekledikten sonra yorumları tekrar çek
+            await fetchComments();
         }
     };
 
@@ -134,7 +131,7 @@ function Post(postProp: CreatePostDto) {
                 >
                     <Stack direction="row" spacing={2}>
                         <IconButton size="medium" sx={{ width: 30, height: 30 }} color="secondary">
-                            <Badge badgeContent={4} color="primary">
+                            <Badge badgeContent={postProp.likeCount} color="primary">
                                 <FavoriteIcon color="error" />
                             </Badge>
                         </IconButton>

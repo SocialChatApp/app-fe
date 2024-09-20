@@ -30,7 +30,7 @@ function UserProfile() {
                         {posts && posts.map((post) => (
                             <Grid item key={post.id}>
                                 <Post
-                                    likes={post.likes}
+                                    likeCount={post.likeCount}
                                     comments={post.comments}
                                     imageUrl={post.imageUrl}
                                     title={post.title}

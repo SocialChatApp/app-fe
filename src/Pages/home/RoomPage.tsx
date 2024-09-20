@@ -130,17 +130,17 @@ function RoomPage({ setForm, socket }: RoomPageProps) {
                                 boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
                                 borderRadius: '4px',
                                 marginBottom: 1,
-                                justifyContent: 'flex-start' // Soldan başlayacak şekilde ayarlandı
+                                justifyContent: 'flex-start'
                             }}
                         >
-                            <Avatar src={user.avatarUrl} alt={user.name} sx={{ marginRight: 2 }} /> {/* Avatar */}
-                            {user.name} {/* Kullanıcı ismi */}
+                            <Avatar src={user.avatarUrl} alt={user.name} sx={{ marginRight: 2 }} />
+                            {user.name}
                         </ListItem>
                     ))}
                 </List>
             </Box>
 
-            {/* Mesajlaşma alanı olacak sağ tarafa yapışık Box */}
+            {/* Mesajlaşma alanı  */}
             <Box
                 sx={{
                     width: '80%',
@@ -150,7 +150,7 @@ function RoomPage({ setForm, socket }: RoomPageProps) {
                     padding: 2
                 }}
             >
-                {/* Mesajları gösteren kısım */}
+                {/* Mesajları Listeleyen Kısım */}
                 <Box
                     sx={{
                         flexGrow: 1,
@@ -170,7 +170,7 @@ function RoomPage({ setForm, socket }: RoomPageProps) {
                                 marginBottom: 1,
                             }}
                         >
-                            <Avatar src={msg.avatarUrl} alt={msg.name} sx={{ marginRight: 2 }} /> {/* Avatar */}
+                            <Avatar src={msg.avatarUrl} alt={msg.name} sx={{ marginRight: 2 }} />
                             <Typography variant="body1" sx={{ wordWrap: 'break-word' }}>
                                 {msg.message}
                             </Typography>
@@ -178,7 +178,7 @@ function RoomPage({ setForm, socket }: RoomPageProps) {
                     ))}
                 </Box>
 
-                {/* Mesaj yazma alanı */}
+                {/* Mesaj Input Field Alanı */}
                 <Stack direction="row" spacing={2}>
                     <TextField
                         fullWidth

@@ -34,7 +34,6 @@ export const createUser = createAsyncThunk<CreateUserDto, CreateUserDto>(
     'user/createUser',
     async (userObj) => {
         const response = await axios.post(`${BASE_URL}`, userObj);
-        //const { id } = response.data;
         return response.data;
     }
 );
@@ -126,7 +125,6 @@ export const userSlice = createSlice({
 },
 )
 
-// Action creators are generated for each case reducer function
 export const { setUser } = userSlice.actions
 
 export default userSlice.reducer

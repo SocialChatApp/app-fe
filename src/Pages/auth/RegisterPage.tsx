@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CreateUserDto } from '../../dto/CreateUserDto';
 import { AppDispatch, RootState } from '../../redux/store';
-import { createUser } from '../../redux/userSlice';
 import { EmailDto } from '../../dto/EmailDto';
 import { sendTokenToMail } from '../../redux/authSlice';
 
@@ -58,7 +57,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ setForm }) => {
         try {
 
             //TODO: save cache userSlice createUserDto
-            //TODO. Send e mail and 
+
             console.log("REQUEST ATILDI");
             const mailDto: EmailDto = {
                 mail: formData.email
@@ -66,10 +65,6 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ setForm }) => {
 
             await dispatch(sendTokenToMail({ mailDto, userDto: formData }));
 
-
-            // const response = await dispatch(createUser(formData));
-            // console.log(response.payload);
-            // Optionally clear form or redirect
         } catch (error) {
             console.error('Error signing up user:', error);
         }

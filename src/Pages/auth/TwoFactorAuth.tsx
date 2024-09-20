@@ -2,7 +2,7 @@ import { Box, Button, CircularProgress, Stack, TextField, Typography } from '@mu
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { verifyToken } from '../../redux/authSlice';
 import { VerificationDto } from '../../dto/VerificationDto';
 
@@ -40,8 +40,6 @@ const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({ setForm }) => {
         }
 
         try {
-            //TODO: do it something here sukkkk
-            //TODOLUYORUM RAMSSSSSSSSSSSSSSSS TISSSSSSSSSSS
 
             if (userInfoCache) {
                 const verificationDto: VerificationDto = {
@@ -63,7 +61,7 @@ const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({ setForm }) => {
     };
 
     const discard = async () => {
-        if (window.confirm("iptal etmek istiyor musunuz?")) {
+        if (window.confirm("Do you want to cancel?")) {
             setForm("login");
         }
     };
@@ -83,7 +81,6 @@ const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({ setForm }) => {
             );
 
             if (timer <= 0) {
-                //TODO: Do it something
                 clearInterval(intervalId)
             };
         }, 1000);
@@ -106,7 +103,7 @@ const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({ setForm }) => {
                     Verification
                 </Typography>
                 <Typography gutterBottom align="center">
-                    example@mail.com adresine doğrulama kodunu gönderdik. Lütfen mailinizi kontrol edip 4 haneli kodu giriniz. kodu almanız biraz zaman alabilir.
+                    {userInfoCache.email} We have sent a verification code to your email address. Please check your email and enter the 4-digit code. It may take some time for you to receive the code.
                 </Typography>
                 <Stack spacing={2} direction="column">
 
@@ -128,7 +125,7 @@ const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({ setForm }) => {
                         fullWidth
                         onClick={checkVerifyCode}
                     >
-                        {isLoading ? <CircularProgress color="inherit" /> : <Typography>Onayla</Typography>}
+                        {isLoading ? <CircularProgress color="inherit" /> : <Typography>Verify</Typography>}
                     </Button>
 
                     <Button
@@ -138,10 +135,10 @@ const TwoFactorAuth: React.FC<TwoFactorAuthProps> = ({ setForm }) => {
                         fullWidth
                         onClick={discard}
                     >
-                        <Typography>iptal</Typography>
+                        <Typography>Cancel</Typography>
                     </Button>
-                    <Typography>kalan süre: {estimated}</Typography>
-                    <Typography>Doğrulama kodunu almadınız mı? <span onClick={() => { alert("re-mail") }}>Tekrar Deneyin</span> </Typography>
+                    <Typography>Time: {estimated}</Typography>
+                    <Typography>You don't get an email? <span onClick={() => { alert("re-mail") }}>Try Again</span> </Typography>
                 </Stack>
             </Box>
 

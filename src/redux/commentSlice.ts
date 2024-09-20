@@ -55,15 +55,15 @@ export const commentSlice = createSlice({
     },
     extraReducers(builder) {
 
-        builder.addCase(createComment.fulfilled, (state, action) => {
+        builder.addCase(createComment.fulfilled, (state) => {
             state.isLoading = false;
-        }).addCase(createComment.pending, (state, action) => {
+        }).addCase(createComment.pending, (state) => {
             state.isLoading = true;
-        }).addCase(createComment.rejected, (state, action) => {
+        }).addCase(createComment.rejected, (state) => {
             state.isLoading = false;
         })
 
-        builder.addCase(fetchAllComments.fulfilled, (state, action) => {
+        builder.addCase(fetchAllComments.fulfilled, () => {
 
         })
 

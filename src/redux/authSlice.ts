@@ -5,7 +5,7 @@ import axios from 'axios';
 import { CreateUserDto } from "../dto/CreateUserDto";
 import { EmailDto } from "../dto/EmailDto";
 import { VerificationDto } from "../dto/VerificationDto";
-import { createUser, setUser, updateUser } from "./userSlice";
+import { createUser, setUser } from "./userSlice";
 
 
 const AUTH_URL = "http://localhost:3000/auth";
@@ -93,7 +93,6 @@ export const GetMe = createAsyncThunk<CreateUserDto, { Authorization: string }>(
         });
 
         dispatch(setUser(response.data as CreateUserDto));
-        //await dispatch(updateUser(response.data));
         return response.data as CreateUserDto;
     }
 );
@@ -160,7 +159,6 @@ export const authSlice = createSlice({
 },
 )
 
-// Action creators are generated for each case reducer function
 export const { } = authSlice.actions
 
 export default authSlice.reducer

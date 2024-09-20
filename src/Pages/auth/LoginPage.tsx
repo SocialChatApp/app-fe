@@ -1,4 +1,4 @@
-import { Box, Button, Card, CircularProgress, Grid, LinearProgress, Link, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Stack, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -11,8 +11,6 @@ interface LoginPageProps {
 }
 
 const LoginPage: React.FC<LoginPageProps> = ({ setForm }) => {
-
-    // const { setForm } = props;
 
     const dispatch = useDispatch<AppDispatch>();
     const { isLoading } = useSelector((store: RootState) => store.auth);
@@ -51,6 +49,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ setForm }) => {
             const loginResult = await dispatch(login(formData));
             if (loginResult.payload) {
                 navigate('/meet-page');
+
+                //TODO: Cache userSlice user obj
             }
         } catch (error) {
             console.error('Error signing up user:', error);

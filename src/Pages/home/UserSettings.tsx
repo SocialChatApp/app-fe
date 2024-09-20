@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import { AppDispatch, RootState } from '../redux/store';
 import { Avatar, Box, TextField, ToggleButton, ToggleButtonGroup, Typography, Divider, Button } from '@mui/material';
 import { AppDispatch, RootState } from '../../redux/store';
 import { UpdateUserDto } from '../../dto/UpdateUserDto';
 import { updateUser, uploadAvatar } from '../../redux/userSlice';
-// import { updateUser, uploadAvatar } from '../redux/userSlice';
-// import { UpdateUserDto } from '../dto/UpdateUserDto';
 
 function UserSettings() {
     const { info: user } = useSelector((store: RootState) => store.user);
@@ -37,7 +34,6 @@ function UserSettings() {
             formData.surname !== user.surname ||
             formData.email !== user.email ||
             formData.password !== user.password ||
-            formData.role !== user.role ||
             formData.searchType !== user.searchType ||
             (selectedFile !== null && imagePreview !== user.avatarUrl);
 
@@ -54,7 +50,6 @@ function UserSettings() {
             email: formData.email,
             password: formData.password,
             searchType: formData.searchType,
-            role: formData.role
         };
 
 
@@ -169,21 +164,7 @@ function UserSettings() {
                     <ToggleButton value="PUBLIC">PUBLIC</ToggleButton>
                 </ToggleButtonGroup>
 
-                <Typography variant="subtitle1" component="div" gutterBottom>
-                    Role
-                </Typography>
-                <ToggleButtonGroup
-                    color="primary"
-                    exclusive
-                    aria-label="Role"
-                    value={formData.role}
-                    fullWidth
-                    onChange={(e, value) => setFormData(prev => ({ ...prev, role: value }))}
-                >
-                    <ToggleButton value="PREMIUM">PREMIUM</ToggleButton>
-                    <ToggleButton value="NORMAL">NORMAL</ToggleButton>
-                    <ToggleButton value="ADMIN">ADMIN</ToggleButton>
-                </ToggleButtonGroup>
+
                 <Button
                     onClick={handleUpdateAvatar}
                     disabled={!isFormChanged}

@@ -8,6 +8,6 @@ export interface CreatePostDto {
     status: StatusType;
     createAt: Date;
     imageUrl: string;
-    likes: number;
+    likeCount: number;
     comments: number;
 }

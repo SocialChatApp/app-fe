@@ -40,7 +40,6 @@ interface PageData {
 
 function Header() {
     const navigate = useNavigate();
-    // const [isAuth, setAuth] = useState(false);
     const { isAuth } = useSelector((store: RootState) => store.auth);
     const { info: user } = useSelector((store: RootState) => store.user);
 
@@ -132,11 +131,6 @@ function Header() {
                                 ))
                             ) : (
                                 <>
-                                    {/* <MenuItem onClick={handleCloseNavMenu}>
-                                        <Link to="/auth/register" className='LinkButton'>
-                                            <Typography style={{ fontFamily: 'monospace' }} textAlign="center">Sign Up</Typography>
-                                        </Link>
-                                    </MenuItem> */}
                                     <MenuItem onClick={handleCloseNavMenu}>
                                         <Link to="/auth/signin" className='LinkButton'>
                                             <Typography style={{ fontFamily: 'monospace' }} textAlign="center">Sign In</Typography>
@@ -185,10 +179,6 @@ function Header() {
                             ))
                         ) : (
                             <Box>
-                                {/* <Button color="inherit" style={{ fontFamily: 'monospace' }} onClick={() => {
-                                    navigate('/auth/signin');
-                                }}>Sign Up</Button> */}
-
                                 <Button color="inherit" style={{ fontFamily: 'monospace' }} onClick={() => {
                                     navigate('/auth/signin')
                                 }}>Sign In</Button>
