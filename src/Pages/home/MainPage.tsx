@@ -4,9 +4,27 @@ import photo2 from '../../assets/images/People-showing.png';
 import '../../App.css';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckIcon from '@mui/icons-material/Check';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux/store';
+import Cookies from 'js-cookie';
+import { setUser } from '../../redux/userSlice';
+import { LogicOperation, updateAuthInf } from '../../redux/authSlice';
 
 function MainPage() {
-    console.log("main page");
+    const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(() => {
+        const userInf = Cookies.get('authInf');
+        if (userInf) {
+            const parsedUserInf = JSON.parse(userInf) as LogicOperation;
+            dispatch(updateAuthInf(parsedUserInf));
+            dispatch(setUser(parsedUserInf.userInf));
+
+            console.log(parsedUserInf);
+        }
+
+    }, [dispatch]);
     return (
         <div className='Main-Layout'>
 

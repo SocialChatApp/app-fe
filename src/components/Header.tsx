@@ -12,9 +12,43 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../redux/store';
 import '../App.css'
+import { LogicOperation, updateAuthInf } from '../redux/authSlice';
+import { CreateUserDto } from '../dto/CreateUserDto';
+import { setUser } from '../redux/userSlice';
+import Cookies from 'js-cookie';
+
+const userState: CreateUserDto = {
+    id: '',
+    name: '',
+    surname: '',
+    email: '',
+    password: '',
+    role: '',
+    searchType: '',
+    avatarUrl: ''
+};
+
+const authState: LogicOperation = {
+    authPage: "login",
+    userInf: {
+        id: '',
+        name: '',
+        surname: '',
+        email: '',
+        password: '',
+        role: '',
+        searchType: '',
+        avatarUrl: ''
+    },
+    userCreated: false,
+    accessToken: "",
+    isAuth: false,
+    isLoading: false
+};
+
 
 
 const pages = ['Meeting'];
@@ -47,6 +81,8 @@ function Header() {
 
     }, [user]);
 
+    const dispatch = useDispatch<AppDispatch>();
+
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -66,9 +102,17 @@ function Header() {
         setAnchorElUser(null);
     };
 
+    const handleLogout = () => {
+        Cookies.remove('authInf');
+        dispatch(setUser(userState));
+        dispatch(updateAuthInf(authState));
+        window.location.href = '/auth/signin';
+    }
+
     return (
         <AppBar position="static" style={{
             backgroundColor: '#ADA2FF',
+            marginBottom: 20
         }} >
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
@@ -212,7 +256,13 @@ function Header() {
                                 >
                                     {settings.map((setting) => (
                                         <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                                            <Link to={setting.path.toLowerCase()} className='LinkButton'>
+                                            <Link to={setting.path.toLowerCase()}
+                                                onClick={() => {
+                                                    if (setting.name === 'Logout') {
+                                                        handleLogout();
+                                                    }
+                                                }}
+                                                className='LinkButton'>
                                                 <Typography textAlign="center">{setting.name}</Typography>
                                             </Link>
                                         </MenuItem>

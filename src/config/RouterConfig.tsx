@@ -15,7 +15,6 @@ import CreatePost from '../components/CreatePost';
 function RouterConfig() {
 
     const { info: user } = useSelector((store: RootState) => store.user);
-
     return (
         <Routes>
             {/* MAIN LAYOUT */}

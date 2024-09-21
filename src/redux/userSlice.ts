@@ -4,6 +4,7 @@ import axios from 'axios';
 import { UpdateUserDto } from '../dto/UpdateUserDto';
 import { RootState } from './store';
 
+
 const BASE_URL = "http://localhost:3000/users";
 
 export interface User {
@@ -27,9 +28,6 @@ const initialState: User = {
 };
 
 
-
-
-
 export const createUser = createAsyncThunk<CreateUserDto, CreateUserDto>(
     'user/createUser',
     async (userObj) => {
@@ -37,8 +35,6 @@ export const createUser = createAsyncThunk<CreateUserDto, CreateUserDto>(
         return response.data;
     }
 );
-
-
 
 export const uploadAvatar = createAsyncThunk(
     "user/uploadAvatar",
@@ -89,13 +85,22 @@ export const fetchUserInfo = createAsyncThunk<CreateUserDto, string>(
     }
 )
 
+
+
 export const userSlice = createSlice({
     name: 'userSlice',
     initialState,
     reducers: {
         setUser(state, action: PayloadAction<CreateUserDto>) {
-            state.info = action.payload;
-        }
+            state.info.id = action.payload.id;
+            state.info.name = action.payload.name;
+            state.info.surname = action.payload.surname;
+            state.info.email = action.payload.email;
+            state.info.password = action.payload.password;
+            state.info.role = action.payload.role;
+            state.info.searchType = action.payload.searchType;
+            state.info.avatarUrl = action.payload.avatarUrl;
+        },
     },
     extraReducers(builder) {
 

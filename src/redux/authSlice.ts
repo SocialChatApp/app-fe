@@ -6,6 +6,8 @@ import { CreateUserDto } from "../dto/CreateUserDto";
 import { EmailDto } from "../dto/EmailDto";
 import { VerificationDto } from "../dto/VerificationDto";
 import { createUser, setUser } from "./userSlice";
+import Cookies from 'js-cookie';
+import { RootState } from "./store";
 
 
 const AUTH_URL = "http://localhost:3000/auth";
@@ -44,7 +46,6 @@ export const sendTokenToMail = createAsyncThunk(
     async ({ mailDto, userDto }: { mailDto: EmailDto; userDto: CreateUserDto }) => {
 
         const response = await axios.post(`${AUTH_URL}/token`, mailDto);
-
         return { data: response.data, userDto };
     }
 );
@@ -70,6 +71,38 @@ export const verifyToken = createAsyncThunk(
     }
 );
 
+const emptyUser: CreateUserDto = {
+    id: '',
+    name: '',
+    surname: '',
+    email: '',
+    password: '',
+    role: '',
+    searchType: '',
+    avatarUrl: ''
+};
+
+
+
+export const logout = createAsyncThunk(
+    "auth/logout",
+    async (_, { dispatch, getState }) => {
+
+        const state = getState() as RootState;
+        state.auth.accessToken = "";
+        state.auth.isAuth = false;
+        state.auth.userInf = emptyUser;
+        state.auth.authPage = 'login';
+
+        dispatch(setUser(emptyUser));
+
+        Cookies.remove('authInf');
+        localStorage.removeItem('authInf');
+        sessionStorage.removeItem('authInf');
+    }
+);
+
+
 
 export const login = createAsyncThunk<LoginResult, LoginDto>(
     'auth/loginUser',
@@ -86,30 +119,42 @@ export const login = createAsyncThunk<LoginResult, LoginDto>(
 export const GetMe = createAsyncThunk<CreateUserDto, { Authorization: string }>(
     'auth/me',
     async (obj, { dispatch }) => {
+
+
         const response = await axios.get(`${AUTH_URL}/me`, {
             headers: {
                 Authorization: obj.Authorization,
             },
         });
 
-        dispatch(setUser(response.data as CreateUserDto));
+        const userInfo = response.data as CreateUserDto;
+
+        await dispatch(setUser(userInfo));
+
+
         return response.data as CreateUserDto;
     }
 );
+
+
 
 export const authSlice = createSlice({
     name: 'userSlice',
     initialState,
     reducers: {
-
+        updateAuthInf: (state, action: PayloadAction<LogicOperation>) => {
+            state.accessToken = action.payload.accessToken;
+            state.userInf = action.payload.userInf;
+            state.isAuth = true;
+        },
     },
     extraReducers(builder) {
 
         builder.addCase(login.fulfilled, (state, action: PayloadAction<LoginResult>) => {
             state.accessToken = action.payload.AccesToken;
             state.isLoading = false;
-            console.log('LOGIN ISLEMI YAPILDI');
-            console.log(state.accessToken);
+
+            Cookies.set('authInf', JSON.stringify(state), { expires: 7 });
 
         }), builder.addCase(login.pending, (state) => {
             state.isLoading = true;
@@ -146,8 +191,12 @@ export const authSlice = createSlice({
         builder.addCase(GetMe.fulfilled, (state, action: PayloadAction<CreateUserDto>) => {
             const { id, name, surname, email, password, role, searchType, avatarUrl } = action.payload;
             state.userInf = { id, name, surname, email, password, role, searchType, avatarUrl };
-            state.isAuth = true;
             state.isLoading = false;
+            state.isAuth = true;
+
+            Cookies.set('authInf', JSON.stringify(state), { expires: 7 });
+            console.log(`COOKİE KAYDEDİLDİ ${state.accessToken}`);
+
         }), builder.addCase(GetMe.pending, (state) => {
             state.isLoading = true;
 
@@ -159,6 +208,6 @@ export const authSlice = createSlice({
 },
 )
 
-export const { } = authSlice.actions
+export const { updateAuthInf } = authSlice.actions
 
 export default authSlice.reducer
