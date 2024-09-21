@@ -51,7 +51,7 @@ const authState: LogicOperation = {
 
 
 
-const pages = ['Meeting'];
+const pages = ['Meeting', "Media"];
 const settings: PageData[] = [
     {
         name: 'Profile',

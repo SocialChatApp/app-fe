@@ -4,14 +4,14 @@ import AddIcon from '@mui/icons-material/Add';
 import { Box, Fab, Grid, LinearProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Post from '../../components/Post';
-import { fetchAllPosts } from '../../redux/postSlice';
+import { fetchMyPosts } from '../../redux/postSlice';
 import { AppDispatch, RootState } from '../../redux/store';
 
 function UserProfile() {
     const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
-        dispatch(fetchAllPosts());
+        dispatch(fetchMyPosts());
     }, []);
 
     const { posts, isLoading } = useSelector((store: RootState) => store.post);

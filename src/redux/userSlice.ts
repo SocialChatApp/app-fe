@@ -3,6 +3,7 @@ import { CreateUserDto } from '../dto/CreateUserDto'
 import axios from 'axios';
 import { UpdateUserDto } from '../dto/UpdateUserDto';
 import { RootState } from './store';
+import { UserInfoDto } from '../dto/UserInfoDto';
 
 
 const BASE_URL = "http://localhost:3000/users";
@@ -26,6 +27,22 @@ const initialState: User = {
     },
     isSignUp: false,
 };
+
+//token ekle headers
+export const fetchAllUsers = createAsyncThunk<UserInfoDto[]>(
+    "user/fetchAll",
+    async (_, { getState }) => {
+
+        const state = getState() as RootState;
+        const accessToken = state.auth.accessToken;
+        const headers = { Authorization: `Bearer ${accessToken}` };
+
+        const response = await axios.get(`${BASE_URL}`, { headers });
+        return response.data as UserInfoDto[];
+    }
+);
+
+
 
 
 export const createUser = createAsyncThunk<CreateUserDto, CreateUserDto>(
@@ -85,6 +102,20 @@ export const fetchUserInfo = createAsyncThunk<CreateUserDto, string>(
     }
 )
 
+export const fetchInfoForMedia = createAsyncThunk<CreateUserDto, string>(
+    "user,fetchInfoForMedia",
+    async (userId, { getState }) => {
+
+        const state = getState() as RootState;
+        const accessToken = state.auth.accessToken;
+        const headers = { Authorization: `Bearer ${accessToken}` };
+
+        const response = await axios.get(`${BASE_URL}/${userId}`, { headers });
+        return response.data;
+    }
+)
+
+
 
 
 export const userSlice = createSlice({
@@ -125,6 +156,10 @@ export const userSlice = createSlice({
 
         builder.addCase(fetchUserInfo.fulfilled, (state, action: PayloadAction<CreateUserDto>) => {
             state.info = action.payload;
+        })
+
+        builder.addCase(fetchInfoForMedia.fulfilled, (state, action: PayloadAction<CreateUserDto>) => {
+
         })
     }
 },

@@ -10,6 +10,7 @@ import MeetingPage from '../Pages/home/MeetingPage';
 import { RootState } from '../redux/store';
 import { useSelector } from 'react-redux';
 import CreatePost from '../components/CreatePost';
+import MediaPage from '../Pages/home/MediaPage';
 
 
 function RouterConfig() {
@@ -30,6 +31,13 @@ function RouterConfig() {
                         <MeetingPage />
                     </Guard>
                 } />
+
+                <Route index path='media' element={
+                    <Guard>
+                        <MediaPage />
+                    </Guard>
+                } />
+
                 <Route index path='settings' element={
                     <Guard>
                         <UserSettings />

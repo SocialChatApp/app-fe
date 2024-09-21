@@ -3,6 +3,7 @@ import { CreatePostDto } from "../dto/CreatePostDto";
 import axios from 'axios';
 import { RootState } from "./store";
 import { UpdatePostDto } from "../dto/UpdatePostDto";
+import { PostInfoDto } from "../dto/PostInfoDto";
 
 
 
@@ -19,8 +20,22 @@ const initialState: InitialState = {
 const BASE_URL = "http://localhost:3000/post/";
 const CLOUD_STORAGE_BASE_URL = "http://localhost:3000/cloud-storage/posts/";
 
-export const fetchAllPosts = createAsyncThunk(
-    'post/fetchAllPosts',
+
+export const fetchAllPosts = createAsyncThunk<PostInfoDto[]>(
+    "post/fetchAllPosts",
+    async (_, { getState }) => {
+
+        const state = getState() as RootState;
+        const accessToken = state.auth.accessToken;
+        const headers = { Authorization: `Bearer ${accessToken}` };
+
+        const response = await axios.get(BASE_URL, { headers });
+        return response.data as PostInfoDto[];
+    }
+);
+
+export const fetchMyPosts = createAsyncThunk(
+    'post/fetchMyPosts',
     async (_, { getState }) => {
 
         const state = getState() as RootState;
@@ -106,12 +121,12 @@ export const postSlice = createSlice({
 
     },
     extraReducers(builder) {
-        builder.addCase(fetchAllPosts.fulfilled, (state, action) => {
+        builder.addCase(fetchMyPosts.fulfilled, (state, action) => {
             state.posts = action.payload;
             state.isLoading = false;
-        }).addCase(fetchAllPosts.pending, (state) => {
+        }).addCase(fetchMyPosts.pending, (state) => {
             state.isLoading = true;
-        }).addCase(fetchAllPosts.rejected, (state) => {
+        }).addCase(fetchMyPosts.rejected, (state) => {
             state.isLoading = false;
         })
 
@@ -155,6 +170,15 @@ export const postSlice = createSlice({
             state.isLoading = true;
         }).addCase(deletePost.rejected, (state) => {
             state.isLoading = false;
+        })
+
+
+        builder.addCase(fetchAllPosts.fulfilled, (state, action) => {
+            state.isLoading = false;
+        }).addCase(fetchAllPosts.pending, (state, action) => {
+            state.isLoading = true;
+        }).addCase(fetchAllPosts.rejected, (state, action) => {
+            state.isLoading = true;
         })
 
     }

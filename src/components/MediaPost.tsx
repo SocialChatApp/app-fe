@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Card, CardActions, CardContent, CardHeader, CardMedia, Divider, IconButton, Stack, Typography, Modal, Box, TextField, Avatar } from "@mui/material";
+import { Avatar, Box, Card, CardActions, CardContent, CardHeader, CardMedia, Divider, IconButton, Stack, Typography, Modal, Badge, TextField } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
-import { CreatePostDto } from "../dto/CreatePostDto";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../redux/store";
-import { deletePost } from "../redux/postSlice";
+import { PostInfoDto } from '../dto/PostInfoDto';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../redux/store';
+import { fetchInfoForMedia } from '../redux/userSlice';
+import { UserInfoDto } from '../dto/UserInfoDto';
+import { CommentInfoDto } from '../dto/CommentInfoDto';
 import { CreateCommentDto } from '../dto/CreateCommentDto';
 import { createComment, fetchAllComments } from '../redux/commentSlice';
-import { CommentInfoDto } from '../dto/CommentInfoDto';
-import { fetchInfoForMedia, fetchUserInfo } from '../redux/userSlice';
 import { CreateUserDto } from '../dto/CreateUserDto';
 
 const modalStyle = {
@@ -26,17 +25,64 @@ const modalStyle = {
     p: 2,
 };
 
-function Post(postProp: CreatePostDto) {
-    const { info: user } = useSelector((store: RootState) => store.user);
-    const dispatch = useDispatch<AppDispatch>();
-    const [open, setOpen] = useState(false);
-    const [comment, setComment] = useState('');
-    const [commentCount, setCommentCount] = useState(0);
-    const [commentsWithUserInfo, setCommentsWithUserInfo] = useState<{ comment: CommentInfoDto; userInfo: CreateUserDto | null }[]>([]);
+interface MediaPostProps {
+    post: PostInfoDto;
+}
 
+function MediaPost({ post }: MediaPostProps) {
+
+    const dispatch = useDispatch<AppDispatch>();
+
+    const [userInf, setUserInf] = useState<UserInfoDto | null>(null);
+    const [liked, setLiked] = useState(false); // Beğenme durumu
+    const [comment, setComment] = useState('');
+    const [open, setOpen] = useState(false);
+    const [commentsWithUserInfo, setCommentsWithUserInfo] = useState<{ comment: CommentInfoDto; userInfo: CreateUserDto | null }[]>([]);
+    const [commentCount, setCommentCount] = useState(0);
+
+    const { info: myInfo } = useSelector((store: RootState) => store.user);
+
+    useEffect(() => {
+        handleUserInfo();  // Post sahibinin bilgilerini çek
+        fetchComments();   // Yorumları ve her yorumun kullanıcısının bilgilerini çek
+    }, []);
+
+    // Postu oluşturan kişinin bilgilerini çekiyoruz
+    const handleUserInfo = async () => {
+        const response = await dispatch(fetchInfoForMedia(post.userId)).unwrap();
+        setUserInf(response);
+    }
+
+    const handleLike = () => {
+        setLiked(!liked);
+    };
+
+    const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setComment(event.target.value);
+    };
+
+    // Yorum yapıldığında
+    const handleCommentSubmit = async () => {
+        if (!userInf) return;
+
+        const commentDto: CreateCommentDto = {
+            userId: myInfo.id,
+            postId: post.id,
+            content: comment
+        };
+
+        const response = await dispatch(createComment(commentDto));
+        if (response) {
+            handleClose();
+            setComment('');
+            await fetchComments();
+        }
+    };
+
+    // Yorumları ve kullanıcı bilgilerini fetch eden fonksiyon
     const fetchComments = async () => {
         try {
-            const action = await dispatch(fetchAllComments(postProp.id));
+            const action = await dispatch(fetchAllComments(post.id));
             if (fetchAllComments.fulfilled.match(action)) {
                 const comments: CommentInfoDto[] = action.payload;
 
@@ -67,61 +113,44 @@ function Post(postProp: CreatePostDto) {
         }
     };
 
-    useEffect(() => {
-        fetchComments();
-    }, [dispatch, postProp.id]);
-
-    const handleDelete = async () => {
-        await dispatch(deletePost(postProp.id));
-    };
-
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setComment(event.target.value);
-    };
-
-    const handleCommentSubmit = async () => {
-        const commentDto: CreateCommentDto = {
-            userId: user.id,
-            postId: postProp.id,
-            content: comment
-        };
-
-        const response = await dispatch(createComment(commentDto));
-        if (response) {
-            handleClose();
-            setComment('');
-            await fetchComments();
-        }
-    };
-
     return (
-        <Card sx={{ maxWidth: 350 }}>
-            <CardHeader
-                title={
-                    <Typography variant="subtitle2" sx={{ textAlign: 'left' }}>
-                        {postProp.createAt.toDateString()}
-                    </Typography>
-                }
-            />
-
+        <Card sx={{ maxWidth: 400, m: 2, borderRadius: 4, boxShadow: 3 }}>
+            {/* Post Image */}
             <CardMedia
                 component="img"
-                height="300"
-                image={postProp.imageUrl}
+                height="200"
+                image={post.imageUrl}
                 alt="Post image"
+                sx={{ objectFit: 'cover' }}
             />
+
+            {/* Avatar, Title, and Content */}
+            <CardHeader
+                avatar={
+                    <Avatar
+                        src={userInf?.avatarUrl || ''}
+                        alt={post.title.charAt(0)}
+                        sx={{ bgcolor: '#2196f3' }}
+                    />
+                }
+                title={<Typography variant="h6" sx={{ fontWeight: 'bold' }}>{post.title}</Typography>}
+                subheader={<Typography variant="body2" color="textSecondary">{userInf?.name}</Typography>}
+            />
+
+            {/* Content */}
             <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                    {postProp.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    {postProp.content}
+                <Typography variant="body1" color="textSecondary">
+                    {post.content.length > 100 ? `${post.content.slice(0, 100)}...` : post.content}
                 </Typography>
             </CardContent>
+
+            {/* Divider */}
             <Divider />
+
+            {/* Actions: Like and Comment */}
             <CardActions>
                 <Stack
                     direction="row"
@@ -130,29 +159,26 @@ function Post(postProp: CreatePostDto) {
                     justifyContent="space-between"
                 >
                     <Stack direction="row" spacing={2}>
-                        <IconButton size="medium" sx={{ width: 30, height: 30 }} color="secondary">
-                            <Badge badgeContent={postProp.likeCount} color="primary">
-                                <FavoriteIcon color="error" />
+                        <IconButton onClick={handleLike}>
+                            <Badge badgeContent={0} color="primary">
+                                <FavoriteIcon color={liked ? "error" : "action"} />
                             </Badge>
                         </IconButton>
-                        <IconButton size="medium" sx={{ width: 30, height: 30 }} color="success" onClick={handleOpen}>
+                        <IconButton onClick={handleOpen}>
                             <Badge badgeContent={commentCount} color="primary">
                                 <ChatBubbleOutlineIcon color="action" />
                             </Badge>
                         </IconButton>
                     </Stack>
-                    <IconButton size="medium" onClick={handleDelete} sx={{ width: 30, height: 30 }} color="default" style={{ marginLeft: 'auto' }}>
-                        <DeleteIcon color="error" />
-                    </IconButton>
                 </Stack>
             </CardActions>
 
-            {/* Modal */}
+            {/* Modal for comments */}
             <Modal
                 open={open}
                 onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
+                aria-labelledby="comment-modal-title"
+                aria-describedby="comment-modal-description"
             >
                 <Box sx={modalStyle}>
                     <Stack direction="column" spacing={2}>
@@ -192,4 +218,4 @@ function Post(postProp: CreatePostDto) {
     );
 }
 
-export default Post;
+export default MediaPost;
