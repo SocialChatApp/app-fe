@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Box, TextField, ToggleButton, ToggleButtonGroup, Typography, Divider, Button } from '@mui/material';
+import { Avatar, Box, TextField, ToggleButton, ToggleButtonGroup, Typography, Divider, Button, LinearProgress } from '@mui/material';
 import { AppDispatch, RootState } from '../../redux/store';
 import { UpdateUserDto } from '../../dto/UpdateUserDto';
 import { updateUser, uploadAvatar } from '../../redux/userSlice';
 
 function UserSettings() {
-    const { info: user } = useSelector((store: RootState) => store.user);
+    const { info: user, isLoading } = useSelector((store: RootState) => store.user);
 
     const [formData, setFormData] = useState({ ...user });
 
@@ -77,100 +77,105 @@ function UserSettings() {
                 flexDirection="column"
                 boxShadow={3}
             >
-                <Typography variant="h5" component="h2" gutterBottom>
-                    User Settings
-                </Typography>
+                {isLoading ? (
+                    <LinearProgress sx={{ width: '100%', mb: 2 }} />
+                ) : (
+                    <>
+                        <Typography variant="h5" component="h2" gutterBottom>
+                            User Settings
+                        </Typography>
 
-                <Avatar
-                    alt="Profile Photo"
-                    src={imagePreview || user.avatarUrl}
-                    sx={{ width: 120, height: 120, mb: 2 }}
-                />
+                        <Avatar
+                            alt="Profile Photo"
+                            src={imagePreview || user.avatarUrl}
+                            sx={{ width: 120, height: 120, mb: 2 }}
+                        />
 
-                <Button
-                    variant="contained"
-                    component="label"
-                    sx={{ mb: 2 }}
-                >
-                    Select Image
-                    <input
-                        type="file"
-                        accept="image/*"
-                        hidden
-                        onChange={handleFileChange}
-                    />
-                </Button>
+                        <Button
+                            variant="contained"
+                            component="label"
+                            sx={{ mb: 2 }}
+                        >
+                            Select Image
+                            <input
+                                type="file"
+                                accept="image/*"
+                                hidden
+                                onChange={handleFileChange}
+                            />
+                        </Button>
 
-                <TextField
-                    id="name"
-                    name="name"
-                    label="Name"
-                    value={formData.name}
-                    variant="outlined"
-                    fullWidth
-                    sx={{ mb: 2 }}
-                    onChange={handleInputChange}
-                />
+                        <TextField
+                            id="name"
+                            name="name"
+                            label="Name"
+                            value={formData.name}
+                            variant="outlined"
+                            fullWidth
+                            sx={{ mb: 2 }}
+                            onChange={handleInputChange}
+                        />
 
-                <TextField
-                    id="surname"
-                    name="surname"
-                    label="Surname"
-                    value={formData.surname}
-                    variant="outlined"
-                    fullWidth
-                    sx={{ mb: 2 }}
-                    onChange={handleInputChange}
-                />
+                        <TextField
+                            id="surname"
+                            name="surname"
+                            label="Surname"
+                            value={formData.surname}
+                            variant="outlined"
+                            fullWidth
+                            sx={{ mb: 2 }}
+                            onChange={handleInputChange}
+                        />
 
-                <TextField
-                    id="email"
-                    name="email"
-                    label="Mail"
-                    value={formData.email}
-                    variant="outlined"
-                    fullWidth
-                    sx={{ mb: 2 }}
-                    onChange={handleInputChange}
-                />
+                        <TextField
+                            id="email"
+                            name="email"
+                            label="Mail"
+                            value={formData.email}
+                            variant="outlined"
+                            fullWidth
+                            sx={{ mb: 2 }}
+                            onChange={handleInputChange}
+                        />
 
-                <TextField
-                    id="password"
-                    name="password"
-                    type="password"
-                    label="Password"
-                    value={formData.password}
-                    variant="outlined"
-                    fullWidth
-                    sx={{ mb: 2 }}
-                    onChange={handleInputChange}
-                />
+                        <TextField
+                            id="password"
+                            name="password"
+                            type="password"
+                            label="Password"
+                            value={formData.password}
+                            variant="outlined"
+                            fullWidth
+                            sx={{ mb: 2 }}
+                            onChange={handleInputChange}
+                        />
 
-                <Divider sx={{ width: '100%', my: 2 }} />
+                        <Divider sx={{ width: '100%', my: 2 }} />
 
-                <Typography variant="subtitle1" component="div" gutterBottom>
-                    Search Type
-                </Typography>
-                <ToggleButtonGroup
-                    color="primary"
-                    exclusive
-                    aria-label="Search Type"
-                    value={formData.searchType}
-                    fullWidth
-                    sx={{ mb: 2 }}
-                    onChange={(e, value) => setFormData(prev => ({ ...prev, searchType: value }))}
-                >
-                    <ToggleButton value="PRIVATE">PRIVATE</ToggleButton>
-                    <ToggleButton value="PUBLIC">PUBLIC</ToggleButton>
-                </ToggleButtonGroup>
+                        <Typography variant="subtitle1" component="div" gutterBottom>
+                            Search Type
+                        </Typography>
+                        <ToggleButtonGroup
+                            color="primary"
+                            exclusive
+                            aria-label="Search Type"
+                            value={formData.searchType}
+                            fullWidth
+                            sx={{ mb: 2 }}
+                            onChange={(e, value) => setFormData(prev => ({ ...prev, searchType: value }))}
+                        >
+                            <ToggleButton value="PRIVATE">PRIVATE</ToggleButton>
+                            <ToggleButton value="PUBLIC">PUBLIC</ToggleButton>
+                        </ToggleButtonGroup>
 
-
-                <Button
-                    onClick={handleUpdateAvatar}
-                    disabled={!isFormChanged}
-                >
-                    Gönder
-                </Button>
+                        <Button
+                            onClick={handleUpdateAvatar}
+                            disabled={!isFormChanged}
+                        >
+                            Send
+                        </Button>
+                    </>
+                )}
             </Box>
         </div>
     );

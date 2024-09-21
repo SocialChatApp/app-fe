@@ -147,6 +147,9 @@ export const authSlice = createSlice({
             state.userInf = action.payload.userInf;
             state.isAuth = true;
         },
+        saveCookie: (state, action: PayloadAction<CreateUserDto>) => {
+            Cookies.set('authInf', JSON.stringify(state), { expires: 7 });
+        },
     },
     extraReducers(builder) {
 
@@ -208,6 +211,6 @@ export const authSlice = createSlice({
 },
 )
 
-export const { updateAuthInf } = authSlice.actions
+export const { updateAuthInf, saveCookie } = authSlice.actions
 
 export default authSlice.reducer

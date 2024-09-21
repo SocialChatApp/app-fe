@@ -13,6 +13,8 @@ import { createComment, fetchAllComments } from '../redux/commentSlice';
 import { CommentInfoDto } from '../dto/CommentInfoDto';
 import { fetchInfoForMedia, fetchUserInfo } from '../redux/userSlice';
 import { CreateUserDto } from '../dto/CreateUserDto';
+import { UserInfoDto } from '../dto/UserInfoDto';
+import { useNavigate } from 'react-router-dom';
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -29,6 +31,7 @@ const modalStyle = {
 function Post(postProp: CreatePostDto) {
     const { info: user } = useSelector((store: RootState) => store.user);
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [comment, setComment] = useState('');
     const [commentCount, setCommentCount] = useState(0);
@@ -74,6 +77,13 @@ function Post(postProp: CreatePostDto) {
     const handleDelete = async () => {
         await dispatch(deletePost(postProp.id));
     };
+
+    const handleUserDetail = (userId: string) => {
+        if (user.id === userId)
+            navigate(`/home/user`);
+        else
+            navigate(`/home/user-detail/${userId}`);
+    }
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -141,9 +151,17 @@ function Post(postProp: CreatePostDto) {
                             </Badge>
                         </IconButton>
                     </Stack>
-                    <IconButton size="medium" onClick={handleDelete} sx={{ width: 30, height: 30 }} color="default" style={{ marginLeft: 'auto' }}>
-                        <DeleteIcon color="error" />
-                    </IconButton>
+                    {postProp.userId === user.id && (
+                        <IconButton
+                            size="medium"
+                            onClick={handleDelete}
+                            sx={{ width: 30, height: 30 }}
+                            color="default"
+                            style={{ marginLeft: 'auto' }}
+                        >
+                            <DeleteIcon color="error" />
+                        </IconButton>
+                    )}
                 </Stack>
             </CardActions>
 
@@ -161,7 +179,21 @@ function Post(postProp: CreatePostDto) {
                                 <Stack direction="row" key={comment.id} spacing={1} alignItems="center">
                                     {userInfo && (
                                         <>
-                                            <Avatar alt={userInfo.name} src={userInfo.avatarUrl} />
+                                            <IconButton
+                                                onClick={() => {
+                                                    if (userInfo)
+                                                        handleUserDetail(userInfo.id);
+                                                }}
+                                                sx={{
+                                                    '&:hover': {
+                                                        cursor: 'pointer',
+                                                        transform: 'scale(1.1)',
+                                                        transition: 'transform 0.2s ease-in-out',
+                                                    },
+                                                }}
+                                            >
+                                                <Avatar alt={userInfo.name} src={userInfo.avatarUrl} />
+                                            </IconButton>
                                             <Typography variant="body2">
                                                 {userInfo.name}: {comment.content}
                                             </Typography>

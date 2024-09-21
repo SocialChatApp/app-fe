@@ -11,6 +11,7 @@ import { RootState } from '../redux/store';
 import { useSelector } from 'react-redux';
 import CreatePost from '../components/CreatePost';
 import MediaPage from '../Pages/home/MediaPage';
+import UserDetails from '../Pages/home/UserDetails';
 
 
 function RouterConfig() {
@@ -35,6 +36,12 @@ function RouterConfig() {
                 <Route index path='media' element={
                     <Guard>
                         <MediaPage />
+                    </Guard>
+                } />
+
+                <Route index path='user-detail/:id' element={
+                    <Guard>
+                        <UserDetails />
                     </Guard>
                 } />
 

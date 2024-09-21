@@ -49,6 +49,22 @@ export const fetchMyPosts = createAsyncThunk(
     }
 );
 
+export const fetchOtherUserPosts = createAsyncThunk(
+    'post/fetchOtherUserPosts',
+    async (userId: string, { getState }) => {
+
+        const state = getState() as RootState;
+        const accessToken = state.auth.accessToken;
+        const headers = { Authorization: `Bearer ${accessToken}` };
+
+        const uri = `${BASE_URL}user/${userId}`;
+
+        const response = await axios.get(uri, { headers });
+        return response.data;
+    }
+);
+
+
 export const createPost = createAsyncThunk<CreatePostDto, CreatePostDto>(
     'post/createPost',
     async (postObj, { getState }) => {

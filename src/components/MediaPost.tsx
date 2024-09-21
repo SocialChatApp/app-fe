@@ -12,6 +12,7 @@ import { CommentInfoDto } from '../dto/CommentInfoDto';
 import { CreateCommentDto } from '../dto/CreateCommentDto';
 import { createComment, fetchAllComments } from '../redux/commentSlice';
 import { CreateUserDto } from '../dto/CreateUserDto';
+import { useNavigate } from 'react-router-dom';
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -34,20 +35,20 @@ function MediaPost({ post }: MediaPostProps) {
     const dispatch = useDispatch<AppDispatch>();
 
     const [userInf, setUserInf] = useState<UserInfoDto | null>(null);
-    const [liked, setLiked] = useState(false); // Beğenme durumu
+    const [liked, setLiked] = useState(false);
     const [comment, setComment] = useState('');
     const [open, setOpen] = useState(false);
     const [commentsWithUserInfo, setCommentsWithUserInfo] = useState<{ comment: CommentInfoDto; userInfo: CreateUserDto | null }[]>([]);
     const [commentCount, setCommentCount] = useState(0);
 
     const { info: myInfo } = useSelector((store: RootState) => store.user);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        handleUserInfo();  // Post sahibinin bilgilerini çek
-        fetchComments();   // Yorumları ve her yorumun kullanıcısının bilgilerini çek
+        handleUserInfo();
+        fetchComments();
     }, []);
 
-    // Postu oluşturan kişinin bilgilerini çekiyoruz
     const handleUserInfo = async () => {
         const response = await dispatch(fetchInfoForMedia(post.userId)).unwrap();
         setUserInf(response);
@@ -79,7 +80,13 @@ function MediaPost({ post }: MediaPostProps) {
         }
     };
 
-    // Yorumları ve kullanıcı bilgilerini fetch eden fonksiyon
+    const handleUserDetail = (info: UserInfoDto) => {
+        if (myInfo.id === info.id)
+            navigate(`/home/user`);
+        else
+            navigate(`/home/user-detail/${info.id}`);
+    }
+
     const fetchComments = async () => {
         try {
             const action = await dispatch(fetchAllComments(post.id));
@@ -130,11 +137,25 @@ function MediaPost({ post }: MediaPostProps) {
             {/* Avatar, Title, and Content */}
             <CardHeader
                 avatar={
-                    <Avatar
-                        src={userInf?.avatarUrl || ''}
-                        alt={post.title.charAt(0)}
-                        sx={{ bgcolor: '#2196f3' }}
-                    />
+                    <IconButton
+                        onClick={() => {
+                            if (userInf)
+                                handleUserDetail(userInf);
+                        }}
+                        sx={{
+                            '&:hover': {
+                                cursor: 'pointer',
+                                transform: 'scale(1.1)',
+                                transition: 'transform 0.2s ease-in-out',
+                            },
+                        }}
+                    >
+                        <Avatar
+                            src={userInf?.avatarUrl || ''}
+                            alt={post.title.charAt(0)}
+                            sx={{ bgcolor: '#2196f3' }}
+                        />
+                    </IconButton>
                 }
                 title={<Typography variant="h6" sx={{ fontWeight: 'bold' }}>{post.title}</Typography>}
                 subheader={<Typography variant="body2" color="textSecondary">{userInf?.name}</Typography>}
@@ -187,7 +208,20 @@ function MediaPost({ post }: MediaPostProps) {
                                 <Stack direction="row" key={comment.id} spacing={1} alignItems="center">
                                     {userInfo && (
                                         <>
-                                            <Avatar alt={userInfo.name} src={userInfo.avatarUrl} />
+                                            <IconButton
+                                                onClick={() => {
+                                                    handleUserDetail(userInfo);
+                                                }}
+                                                sx={{
+                                                    '&:hover': {
+                                                        cursor: 'pointer',
+                                                        transform: 'scale(1.1)',
+                                                        transition: 'transform 0.2s ease-in-out',
+                                                    },
+                                                }}
+                                            >
+                                                <Avatar alt={userInfo.name} src={userInfo.avatarUrl} />
+                                            </IconButton>
                                             <Typography variant="body2">
                                                 {userInfo.name}: {comment.content}
                                             </Typography>

@@ -4,6 +4,8 @@ import axios from 'axios';
 import { UpdateUserDto } from '../dto/UpdateUserDto';
 import { RootState } from './store';
 import { UserInfoDto } from '../dto/UserInfoDto';
+import Cookies from 'js-cookie';
+import { saveCookie, updateAuthInf } from './authSlice';
 
 
 const BASE_URL = "http://localhost:3000/users";
@@ -11,6 +13,7 @@ const BASE_URL = "http://localhost:3000/users";
 export interface User {
     info: CreateUserDto;
     isSignUp: boolean;
+    isLoading: boolean;
 }
 
 
@@ -26,6 +29,7 @@ const initialState: User = {
         avatarUrl: ''
     },
     isSignUp: false,
+    isLoading: false
 };
 
 //token ekle headers
@@ -77,14 +81,17 @@ export const uploadAvatar = createAsyncThunk(
 
 export const updateUser = createAsyncThunk<CreateUserDto, { userId: string; userObj: UpdateUserDto }>(
     "user/updateUser",
-    async ({ userId, userObj }, { getState }) => {
+    async ({ userId, userObj }, { getState, dispatch }) => {
 
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
 
         const response = await axios.patch(`${BASE_URL}/${userId}`, userObj, { headers });
-        await fetchUserInfo(userId);
+
+        const user = await dispatch(fetchUserInfo(userId)).unwrap();
+        dispatch(saveCookie(user));
+
         return response.data;
     }
 );
@@ -116,8 +123,6 @@ export const fetchInfoForMedia = createAsyncThunk<CreateUserDto, string>(
 )
 
 
-
-
 export const userSlice = createSlice({
     name: 'userSlice',
     initialState,
@@ -137,29 +142,59 @@ export const userSlice = createSlice({
 
         builder.addCase(createUser.fulfilled, (state) => {
             state.isSignUp = true;
+            state.isLoading = false;
         }).addCase(createUser.pending, (state) => {
+            state.isLoading = true;
             state.isSignUp = false;
         }).addCase(createUser.rejected, (state) => {
+            state.isLoading = false;
             state.isSignUp = false;
         })
 
         builder.addCase(uploadAvatar.fulfilled, (state, action: PayloadAction<string>) => {
+            state.isLoading = false;
             state.info.avatarUrl = action.payload;
-        }).addCase(uploadAvatar.pending, () => {
+        }).addCase(uploadAvatar.pending, (state, action) => {
+            state.isLoading = true;
         }).addCase(uploadAvatar.rejected, (state, action) => {
+            state.isLoading = false;
             console.log(action.error);
         })
 
-        builder.addCase(updateUser.fulfilled, (state, action: PayloadAction<CreateUserDto>) => {
+        builder.addCase(updateUser.fulfilled, (state, action) => {
+            state.isLoading = false;
             // NO CONTENT RETURN FROM API
+        }).addCase(updateUser.pending, (state, action) => {
+            state.isLoading = true;
+        }).addCase(updateUser.rejected, (state, action) => {
+            state.isLoading = false;
+            console.log(action.error);
         })
 
         builder.addCase(fetchUserInfo.fulfilled, (state, action: PayloadAction<CreateUserDto>) => {
-            state.info = action.payload;
+            //state.info = action.payload;
+            //state.info.name=action.payload.name;
+            state.isLoading = false;
+            state.info.name = action.payload.name;
+            state.info.surname = action.payload.surname;
+            state.info.email = action.payload.email;
+            state.info.password = action.payload.password;
+            state.info.role = action.payload.role;
+            state.info.searchType = action.payload.searchType;
+            state.info.avatarUrl = action.payload.avatarUrl;
+
+        }).addCase(fetchUserInfo.pending, (state, action) => {
+            state.isLoading = true;
+        }).addCase(fetchUserInfo.rejected, (state, action) => {
+            state.isLoading = false;
         })
 
         builder.addCase(fetchInfoForMedia.fulfilled, (state, action: PayloadAction<CreateUserDto>) => {
-
+            state.isLoading = false;
+        }).addCase(fetchInfoForMedia.pending, (state, action) => {
+            state.isLoading = true;
+        }).addCase(fetchInfoForMedia.rejected, (state, action) => {
+            state.isLoading = false;
         })
     }
 },
