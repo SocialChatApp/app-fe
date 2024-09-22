@@ -4,6 +4,32 @@ import { RootState } from "./store";
 import { CreateCommentReplyDto } from "../dto/CreateCommentReplyDto";
 import { CommentReplyInfoDto } from "../dto/CommentReplyInfoDto";
 
+import Cookies from 'js-cookie';
+import { CreateUserDto } from "../dto/CreateUserDto";
+import { LogicOperation, checkAccesTokenIsValid, updateAuthInf } from "./authSlice";
+import { setUser } from "./userSlice";
+
+const userState: CreateUserDto = {
+    id: '',
+    name: '',
+    surname: '',
+    email: '',
+    password: '',
+    role: '',
+    searchType: '',
+    avatarUrl: ''
+};
+
+const authState: LogicOperation = {
+    authPage: "login",
+    userInf: userState,
+    userCreated: false,
+    accessToken: "",
+    isAuth: false,
+    isLoading: false
+};
+
+
 interface replyLogicOperation {
     isLoading: boolean;
 }
@@ -17,7 +43,8 @@ const BASE_URL = `http://localhost:3000/reply`;
 
 export const createCommentReply = createAsyncThunk(
     "commentReply/create",
-    async (replyDto: CreateCommentReplyDto, { getState }) => {
+    async (replyDto: CreateCommentReplyDto, { getState, dispatch }) => {
+        await checkTokenValidity(dispatch);
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
@@ -29,7 +56,8 @@ export const createCommentReply = createAsyncThunk(
 
 export const deleteCommentReply = createAsyncThunk(
     "commentReply/delete",
-    async (replyId: String, { getState }) => {
+    async (replyId: String, { getState, dispatch }) => {
+        await checkTokenValidity(dispatch);
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
@@ -41,8 +69,8 @@ export const deleteCommentReply = createAsyncThunk(
 
 export const fetchAllCommentReply = createAsyncThunk<CommentReplyInfoDto[], string>(
     "commentReply/fetchAll",
-    async (commentId: string, { getState }) => {
-
+    async (commentId: string, { getState, dispatch }) => {
+        await checkTokenValidity(dispatch);
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
@@ -54,8 +82,8 @@ export const fetchAllCommentReply = createAsyncThunk<CommentReplyInfoDto[], stri
 
 export const findOneReply = createAsyncThunk(
     "commentReply/findOne",
-    async (replyId: string, { getState }) => {
-
+    async (replyId: string, { getState, dispatch }) => {
+        await checkTokenValidity(dispatch);
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
@@ -63,6 +91,18 @@ export const findOneReply = createAsyncThunk(
         return await axios.get(`${BASE_URL}/${replyId}`, { headers });
     }
 );
+
+const checkTokenValidity = async (dispatch: any) => {
+    const isValid = await dispatch(checkAccesTokenIsValid()).unwrap();
+    if (!isValid) {
+        alert('Your session has timed out. Please log in again.');
+        Cookies.remove('authInf');
+        dispatch(setUser(userState));
+        dispatch(updateAuthInf(authState));
+        window.location.href = '/auth/signin';
+        throw new Error('Session timed out');
+    }
+};
 
 
 export const commentRepliesSlice = createSlice({

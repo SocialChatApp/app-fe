@@ -1,21 +1,68 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
 import { Box, Button, Skeleton, Stack, TextField } from '@mui/material';
 import RoomList from '../../components/RoomList';
 import { Socket, io } from 'socket.io-client';
 import LobbyPage from './LobbyPage';
 import RoomPage from './RoomPage';
+import { LogicOperation, checkAccesTokenIsValid, updateAuthInf } from '../../redux/authSlice';
+import Cookies from 'js-cookie';
+import { CreateUserDto } from '../../dto/CreateUserDto';
+import { setUser } from '../../redux/userSlice';
+
+
+const userState: CreateUserDto = {
+    id: '',
+    name: '',
+    surname: '',
+    email: '',
+    password: '',
+    role: '',
+    searchType: '',
+    avatarUrl: ''
+};
+
+const authState: LogicOperation = {
+    authPage: "login",
+    userInf: userState,
+    userCreated: false,
+    accessToken: "",
+    isAuth: false,
+    isLoading: false
+};
 
 let socket: Socket;
 
+const privateUserInfo = {
+    name: '',
+    avatarUrl: ''
+}
+
+
 
 function MeetingPage() {
+    const dispatch = useDispatch<AppDispatch>();
+
     const [loading, setLoading] = useState<boolean>(true);
 
     const { info: user } = useSelector((store: RootState) => store.user);
 
+    const checkToken = async () => {
+        const isValid = await dispatch(checkAccesTokenIsValid()).unwrap();
+        if (!isValid) {
+            Cookies.remove('authInf');
+            dispatch(setUser(userState));
+            dispatch(updateAuthInf(authState));
+            window.location.href = '/auth/signin';
+            throw new Error('Session timed out');
+        }
+    }
+
     useEffect(() => {
+
+
+        checkToken();
 
         socket = io('http://localhost:4000');
 

@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import Guard from '../components/Auth/Guard';
 import AuthLayout from '../layouts/AuthLayout';
 import MainLayout from '../layouts/MainLayout';
@@ -7,16 +7,19 @@ import MainPage from '../Pages/home/MainPage';
 import UserProfile from '../Pages/home/UserProfile';
 import UserSettings from '../Pages/home/UserSettings';
 import MeetingPage from '../Pages/home/MeetingPage';
-import { RootState } from '../redux/store';
 import { useSelector } from 'react-redux';
 import CreatePost from '../components/CreatePost';
 import MediaPage from '../Pages/home/MediaPage';
 import UserDetails from '../Pages/home/UserDetails';
+import { RootState } from '../redux/store';
+
+
 
 
 function RouterConfig() {
 
     const { info: user } = useSelector((store: RootState) => store.user);
+
     return (
         <Routes>
             {/* MAIN LAYOUT */}

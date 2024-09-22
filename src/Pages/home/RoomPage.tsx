@@ -22,7 +22,13 @@ function RoomPage({ setForm, socket }: RoomPageProps) {
 
     const { info: userInfo } = useSelector((store: RootState) => store.user);
 
+    const privateUserInfo = {
+        name: '',
+        avatarUrl: ''
+    }
+
     useEffect(() => {
+
 
         socket.on('roomInfo', (data) => {
             setRoomName(data.roomName);
@@ -73,8 +79,8 @@ function RoomPage({ setForm, socket }: RoomPageProps) {
 
         const payload = {
             roomName,
-            sender: userInfo.name,
-            avatarUrl: userInfo.avatarUrl,
+            sender: userInfo.searchType == 'PRIVATE' ? privateUserInfo.name : userInfo.name,
+            avatarUrl: userInfo.searchType == 'PRIVATE' ? privateUserInfo.avatarUrl : userInfo.avatarUrl,
             message: clientMessage
         };
 
@@ -171,9 +177,14 @@ function RoomPage({ setForm, socket }: RoomPageProps) {
                             }}
                         >
                             <Avatar src={msg.avatarUrl} alt={msg.name} sx={{ marginRight: 2 }} />
-                            <Typography variant="body1" sx={{ wordWrap: 'break-word' }}>
-                                {msg.message}
-                            </Typography>
+                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 'bold', alignSelf: 'flex-start' }}>
+                                    {msg.name}
+                                </Typography>
+                                <Typography variant="body1" sx={{ wordWrap: 'break-word' }}>
+                                    {msg.message}
+                                </Typography>
+                            </Box>
                         </Box>
                     ))}
                 </Box>

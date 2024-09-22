@@ -8,11 +8,16 @@ import { createCommentReply, fetchAllCommentReply } from '../redux/commentReplie
 import { CommentReplyInfoDto } from '../dto/CommentReplyInfoDto';
 import { CreateCommentReplyDto } from '../dto/CreateCommentReplyDto';
 import CommentReply from './CommentReply';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { deleteComment } from '../redux/commentSlice';
+
 
 interface CommentProps {
     commentInfo: CommentInfoDto;
     userInfo: CreateUserDto;
     onUserDetail: (info: CreateUserDto) => void;
+    onHandleClose: (isOpen: boolean) => void;
+    onFetchAllComments: () => void;
 }
 
 const modalStyle = {
@@ -27,7 +32,7 @@ const modalStyle = {
 };
 
 
-function Comment({ commentInfo, userInfo, onUserDetail }: CommentProps) {
+function Comment({ commentInfo, userInfo, onUserDetail, onFetchAllComments, onHandleClose }: CommentProps) {
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -49,6 +54,12 @@ function Comment({ commentInfo, userInfo, onUserDetail }: CommentProps) {
     const handleReplyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setReplyContent(event.target.value);
     };
+
+    const handleDelete = async (commentId: string) => {
+        await dispatch(deleteComment(commentId));
+        await onFetchAllComments();
+        handleClose();
+    }
 
     const fetchReply = async () => {
         const response = await dispatch(fetchAllCommentReply(commentInfo.id)).unwrap();
@@ -90,6 +101,18 @@ function Comment({ commentInfo, userInfo, onUserDetail }: CommentProps) {
                 {replies.length > 0 ? `+${replies.length}` : "Answer"}
             </Button>
 
+            {/* Delete button conditionally rendered */}
+            {commentInfo.userId === info.id && (
+                <IconButton
+                    onClick={() => {
+                        handleDelete(commentInfo.id)
+                    }}
+                    sx={{ color: 'red' }}
+                >
+                    <DeleteIcon />
+                </IconButton>
+            )}
+
             <Modal open={open} onClose={handleClose}>
                 <Box sx={modalStyle}>
                     <Typography variant="h6">Yanıtlar</Typography>
@@ -98,7 +121,7 @@ function Comment({ commentInfo, userInfo, onUserDetail }: CommentProps) {
                             <CommentReply onClose={handleClose} onFetch={fetchReply} key={reply.id} info={reply} />
                         ))}
                     </Box>
-                    <Typography variant="h6">Yeni Yanıt Yaz</Typography>
+                    <Typography variant="h6">Enter your answer</Typography>
                     <TextField
                         label="Yanıtınızı yazın"
                         variant="outlined"
@@ -115,7 +138,7 @@ function Comment({ commentInfo, userInfo, onUserDetail }: CommentProps) {
                         onClick={handleReplySubmit}
                         sx={{ mt: 2 }}
                     >
-                        Gönder
+                        Send
                     </Button>
                 </Box>
             </Modal>

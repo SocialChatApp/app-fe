@@ -33,16 +33,7 @@ const userState: CreateUserDto = {
 
 const authState: LogicOperation = {
     authPage: "login",
-    userInf: {
-        id: '',
-        name: '',
-        surname: '',
-        email: '',
-        password: '',
-        role: '',
-        searchType: '',
-        avatarUrl: ''
-    },
+    userInf: userState,
     userCreated: false,
     accessToken: "",
     isAuth: false,

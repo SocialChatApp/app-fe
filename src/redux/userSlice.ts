@@ -5,10 +5,31 @@ import { UpdateUserDto } from '../dto/UpdateUserDto';
 import { RootState } from './store';
 import { UserInfoDto } from '../dto/UserInfoDto';
 import Cookies from 'js-cookie';
-import { saveCookie, updateAuthInf } from './authSlice';
+import { LogicOperation, checkAccesTokenIsValid, saveCookie, updateAuthInf } from './authSlice';
 
 
 const BASE_URL = "http://localhost:3000/users";
+
+const userState: CreateUserDto = {
+    id: '',
+    name: '',
+    surname: '',
+    email: '',
+    password: '',
+    role: '',
+    searchType: '',
+    avatarUrl: ''
+};
+
+const authState: LogicOperation = {
+    authPage: "login",
+    userInf: userState,
+    userCreated: false,
+    accessToken: "",
+    isAuth: false,
+    isLoading: false
+};
+
 
 export interface User {
     info: CreateUserDto;
@@ -18,16 +39,7 @@ export interface User {
 
 
 const initialState: User = {
-    info: {
-        id: '',
-        name: '',
-        surname: '',
-        email: '',
-        password: '',
-        role: '',
-        searchType: '',
-        avatarUrl: ''
-    },
+    info: userState,
     isSignUp: false,
     isLoading: false
 };
@@ -35,7 +47,9 @@ const initialState: User = {
 //token ekle headers
 export const fetchAllUsers = createAsyncThunk<UserInfoDto[]>(
     "user/fetchAll",
-    async (_, { getState }) => {
+    async (_, { getState, dispatch }) => {
+
+        await checkTokenValidity(dispatch);
 
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
@@ -59,7 +73,10 @@ export const createUser = createAsyncThunk<CreateUserDto, CreateUserDto>(
 
 export const uploadAvatar = createAsyncThunk(
     "user/uploadAvatar",
-    async ({ img, userId }: { img: File, userId: string }, { getState }) => {
+    async ({ img, userId }: { img: File, userId: string }, { getState, dispatch }) => {
+
+        await checkTokenValidity(dispatch);
+
 
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
@@ -83,6 +100,9 @@ export const updateUser = createAsyncThunk<CreateUserDto, { userId: string; user
     "user/updateUser",
     async ({ userId, userObj }, { getState, dispatch }) => {
 
+        await checkTokenValidity(dispatch);
+
+
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
         const headers = { Authorization: `Bearer ${accessToken}` };
@@ -98,7 +118,11 @@ export const updateUser = createAsyncThunk<CreateUserDto, { userId: string; user
 
 export const fetchUserInfo = createAsyncThunk<CreateUserDto, string>(
     "user,fetchUser",
-    async (userId, { getState }) => {
+    async (userId, { getState, dispatch }) => {
+
+        await checkTokenValidity(dispatch);
+
+
 
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
@@ -111,7 +135,9 @@ export const fetchUserInfo = createAsyncThunk<CreateUserDto, string>(
 
 export const fetchInfoForMedia = createAsyncThunk<CreateUserDto, string>(
     "user,fetchInfoForMedia",
-    async (userId, { getState }) => {
+    async (userId, { getState, dispatch }) => {
+
+        await checkTokenValidity(dispatch);
 
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
@@ -121,6 +147,24 @@ export const fetchInfoForMedia = createAsyncThunk<CreateUserDto, string>(
         return response.data;
     }
 )
+
+
+const AUTH_URL = "http://localhost:3000/auth";
+
+
+const checkTokenValidity = async (dispatch: any) => {
+    const isValid = await dispatch(checkAccesTokenIsValid()).unwrap();
+    console.log(isValid);
+    if (!isValid) {
+        alert('Your session has timed out. Please log in again.');
+        Cookies.remove('authInf');
+        dispatch(setUser(userState));
+        dispatch(updateAuthInf(authState));
+        window.location.href = '/auth/signin';
+        throw new Error('Session timed out');
+    }
+};
+
 
 
 export const userSlice = createSlice({

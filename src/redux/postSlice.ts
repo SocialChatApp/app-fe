@@ -4,8 +4,30 @@ import axios from 'axios';
 import { RootState } from "./store";
 import { UpdatePostDto } from "../dto/UpdatePostDto";
 import { PostInfoDto } from "../dto/PostInfoDto";
+import { LogicOperation, checkAccesTokenIsValid, updateAuthInf } from "./authSlice";
+import { setUser } from "./userSlice";
+import Cookies from 'js-cookie';
+import { CreateUserDto } from "../dto/CreateUserDto";
 
+const userState: CreateUserDto = {
+    id: '',
+    name: '',
+    surname: '',
+    email: '',
+    password: '',
+    role: '',
+    searchType: '',
+    avatarUrl: ''
+};
 
+const authState: LogicOperation = {
+    authPage: "login",
+    userInf: userState,
+    userCreated: false,
+    accessToken: "",
+    isAuth: false,
+    isLoading: false
+};
 
 export interface InitialState {
     posts: CreatePostDto[];
@@ -23,7 +45,9 @@ const CLOUD_STORAGE_BASE_URL = "http://localhost:3000/cloud-storage/posts/";
 
 export const fetchAllPosts = createAsyncThunk<PostInfoDto[]>(
     "post/fetchAllPosts",
-    async (_, { getState }) => {
+    async (_, { getState, dispatch }) => {
+
+        await checkTokenValidity(dispatch);
 
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
@@ -36,7 +60,9 @@ export const fetchAllPosts = createAsyncThunk<PostInfoDto[]>(
 
 export const fetchMyPosts = createAsyncThunk(
     'post/fetchMyPosts',
-    async (_, { getState }) => {
+    async (_, { getState, dispatch }) => {
+
+        await checkTokenValidity(dispatch);
 
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
@@ -51,7 +77,8 @@ export const fetchMyPosts = createAsyncThunk(
 
 export const fetchOtherUserPosts = createAsyncThunk(
     'post/fetchOtherUserPosts',
-    async (userId: string, { getState }) => {
+    async (userId: string, { getState, dispatch }) => {
+        await checkTokenValidity(dispatch);
 
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
@@ -67,7 +94,8 @@ export const fetchOtherUserPosts = createAsyncThunk(
 
 export const createPost = createAsyncThunk<CreatePostDto, CreatePostDto>(
     'post/createPost',
-    async (postObj, { getState }) => {
+    async (postObj, { getState, dispatch }) => {
+        await checkTokenValidity(dispatch);
 
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
@@ -80,7 +108,8 @@ export const createPost = createAsyncThunk<CreatePostDto, CreatePostDto>(
 
 export const updatePost = createAsyncThunk<UpdatePostDto, { postId: string; postObj: UpdatePostDto }>(
     "post/updatePost",
-    async ({ postId, postObj }, { getState }) => {
+    async ({ postId, postObj }, { getState, dispatch }) => {
+        await checkTokenValidity(dispatch);
 
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
@@ -95,7 +124,8 @@ export const updatePost = createAsyncThunk<UpdatePostDto, { postId: string; post
 
 export const uploadPostImage = createAsyncThunk(
     "post/uploadPostImage",
-    async ({ img, postId }: { img: File, postId: string }, { getState }) => {
+    async ({ img, postId }: { img: File, postId: string }, { getState, dispatch }) => {
+        await checkTokenValidity(dispatch);
 
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
@@ -118,7 +148,8 @@ export const uploadPostImage = createAsyncThunk(
 
 export const deletePost = createAsyncThunk(
     "post/deletePost",
-    async (postId: string, { getState }) => {
+    async (postId: string, { getState, dispatch }) => {
+        await checkTokenValidity(dispatch);
 
         const state = getState() as RootState;
         const accessToken = state.auth.accessToken;
@@ -129,6 +160,19 @@ export const deletePost = createAsyncThunk(
         return postId;
     }
 );
+
+
+const checkTokenValidity = async (dispatch: any) => {
+    const isValid = await dispatch(checkAccesTokenIsValid()).unwrap();
+    if (!isValid) {
+        alert('Your session has timed out. Please log in again.');
+        Cookies.remove('authInf');
+        dispatch(setUser(userState));
+        dispatch(updateAuthInf(authState));
+        window.location.href = '/auth/signin';
+        throw new Error('Session timed out');
+    }
+};
 
 export const postSlice = createSlice({
     name: 'postSlice',

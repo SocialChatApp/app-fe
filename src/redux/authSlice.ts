@@ -137,6 +137,24 @@ export const GetMe = createAsyncThunk<CreateUserDto, { Authorization: string }>(
 );
 
 
+export const checkAccesTokenIsValid = createAsyncThunk<boolean, void, { state: RootState }>(
+    'auth/checkAccessToken',
+    async (_, { getState }) => {
+        const state = getState();
+        const accessToken = state.auth.accessToken;
+
+        const tokenObj = {
+            "accessToken": accessToken
+        };
+
+        const response = await axios.post(`${AUTH_URL}/accessToken`, tokenObj);
+
+        return response.data.isValid;
+    }
+);
+
+
+
 
 export const authSlice = createSlice({
     name: 'userSlice',
@@ -149,14 +167,14 @@ export const authSlice = createSlice({
         },
         saveCookie: (state, action: PayloadAction<CreateUserDto>) => {
             Cookies.set('authInf', JSON.stringify(state), { expires: 7 });
-        },
+        }
     },
     extraReducers(builder) {
 
         builder.addCase(login.fulfilled, (state, action: PayloadAction<LoginResult>) => {
             state.accessToken = action.payload.AccesToken;
             state.isLoading = false;
-
+            state.isAuth = true;
             Cookies.set('authInf', JSON.stringify(state), { expires: 7 });
 
         }), builder.addCase(login.pending, (state) => {

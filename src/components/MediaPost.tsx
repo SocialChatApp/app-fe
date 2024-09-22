@@ -211,6 +211,8 @@ function MediaPost({ post }: MediaPostProps) {
                                     commentInfo={comment}
                                     userInfo={userInfo!}
                                     onUserDetail={handleUserDetail}
+                                    onFetchAllComments={fetchComments}
+                                    onHandleClose={setOpen}
                                 />
                             ))}
 
