@@ -3,13 +3,15 @@ import userReducer from './userSlice'
 import postReducer from './postSlice'
 import authReducer from './authSlice'
 import commentReducer from './commentSlice'
+import commentReplyReducer from './commentReplies';
 
 export const store = configureStore({
     reducer: {
         user: userReducer,
         post: postReducer,
         auth: authReducer,
-        comment: commentReducer
+        comment: commentReducer,
+        commentReply: commentReplyReducer
     },
 })
 

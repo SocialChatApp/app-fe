@@ -13,6 +13,7 @@ import { CreateCommentDto } from '../dto/CreateCommentDto';
 import { createComment, fetchAllComments } from '../redux/commentSlice';
 import { CreateUserDto } from '../dto/CreateUserDto';
 import { useNavigate } from 'react-router-dom';
+import Comment from './Comment';
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -205,30 +206,14 @@ function MediaPost({ post }: MediaPostProps) {
                     <Stack direction="column" spacing={2}>
                         <Stack spacing={1}>
                             {commentsWithUserInfo.map(({ comment, userInfo }) => (
-                                <Stack direction="row" key={comment.id} spacing={1} alignItems="center">
-                                    {userInfo && (
-                                        <>
-                                            <IconButton
-                                                onClick={() => {
-                                                    handleUserDetail(userInfo);
-                                                }}
-                                                sx={{
-                                                    '&:hover': {
-                                                        cursor: 'pointer',
-                                                        transform: 'scale(1.1)',
-                                                        transition: 'transform 0.2s ease-in-out',
-                                                    },
-                                                }}
-                                            >
-                                                <Avatar alt={userInfo.name} src={userInfo.avatarUrl} />
-                                            </IconButton>
-                                            <Typography variant="body2">
-                                                {userInfo.name}: {comment.content}
-                                            </Typography>
-                                        </>
-                                    )}
-                                </Stack>
+                                <Comment
+                                    key={comment.id}
+                                    commentInfo={comment}
+                                    userInfo={userInfo!}
+                                    onUserDetail={handleUserDetail}
+                                />
                             ))}
+
                         </Stack>
 
                         <Stack direction="row" spacing={1} alignItems="center">
