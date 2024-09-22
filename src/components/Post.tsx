@@ -15,6 +15,7 @@ import { fetchInfoForMedia, fetchUserInfo } from '../redux/userSlice';
 import { CreateUserDto } from '../dto/CreateUserDto';
 import { UserInfoDto } from '../dto/UserInfoDto';
 import { useNavigate } from 'react-router-dom';
+import Comment from './Comment';
 
 const modalStyle = {
     position: 'absolute' as 'absolute',
@@ -78,11 +79,11 @@ function Post(postProp: CreatePostDto) {
         await dispatch(deletePost(postProp.id));
     };
 
-    const handleUserDetail = (userId: string) => {
-        if (user.id === userId)
+    const handleUserDetail = (info: UserInfoDto) => {
+        if (user.id === info.id)
             navigate(`/home/user`);
         else
-            navigate(`/home/user-detail/${userId}`);
+            navigate(`/home/user-detail/${info.id}`);
     }
 
     const handleOpen = () => setOpen(true);
@@ -176,30 +177,12 @@ function Post(postProp: CreatePostDto) {
                     <Stack direction="column" spacing={2}>
                         <Stack spacing={1}>
                             {commentsWithUserInfo.map(({ comment, userInfo }) => (
-                                <Stack direction="row" key={comment.id} spacing={1} alignItems="center">
-                                    {userInfo && (
-                                        <>
-                                            <IconButton
-                                                onClick={() => {
-                                                    if (userInfo)
-                                                        handleUserDetail(userInfo.id);
-                                                }}
-                                                sx={{
-                                                    '&:hover': {
-                                                        cursor: 'pointer',
-                                                        transform: 'scale(1.1)',
-                                                        transition: 'transform 0.2s ease-in-out',
-                                                    },
-                                                }}
-                                            >
-                                                <Avatar alt={userInfo.name} src={userInfo.avatarUrl} />
-                                            </IconButton>
-                                            <Typography variant="body2">
-                                                {userInfo.name}: {comment.content}
-                                            </Typography>
-                                        </>
-                                    )}
-                                </Stack>
+                                <Comment
+                                    key={comment.id}
+                                    commentInfo={comment}
+                                    userInfo={userInfo!}
+                                    onUserDetail={handleUserDetail}
+                                />
                             ))}
                         </Stack>
 

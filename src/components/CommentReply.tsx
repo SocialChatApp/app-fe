@@ -7,6 +7,7 @@ import { AppDispatch, RootState } from '../redux/store';
 import { fetchInfoForMedia } from '../redux/userSlice';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { deleteCommentReply } from '../redux/commentReplies';
+import { useNavigate } from 'react-router-dom';
 
 interface CommentReplyProps {
     info: CommentReplyInfoDto;
@@ -22,6 +23,8 @@ function CommentReply({ info, onClose, onFetch }: CommentReplyProps) {
         handleUserInfo();
     }, []);
 
+    const navigate = useNavigate();
+
     const handleUserInfo = async () => {
         const response = await dispatch(fetchInfoForMedia(info.userId)).unwrap();
         setUserInf(response);
@@ -33,10 +36,30 @@ function CommentReply({ info, onClose, onFetch }: CommentReplyProps) {
         onClose();
     }
 
+    const handleUserDetail = (id: string) => {
+        if (user.id === id)
+            navigate(`/home/user`);
+        else
+            navigate(`/home/user-detail/${info.id}`);
+    }
+
     return (
         <Box sx={{ mt: 1, mb: 1, p: 1, borderRadius: 2, bgcolor: '#f5f5f5', boxShadow: 1, position: 'relative' }}>
             <Stack direction="row" spacing={1} alignItems="center">
-                <Avatar alt={userInf?.name} src={userInf?.avatarUrl} sx={{ width: 32, height: 32 }} />
+                <IconButton
+                    onClick={() => {
+                        handleUserDetail(info.userId);
+                    }}
+                    sx={{
+                        '&:hover': {
+                            cursor: 'pointer',
+                            transform: 'scale(1.1)',
+                            transition: 'transform 0.2s ease-in-out',
+                        },
+                    }}
+                >
+                    <Avatar alt={userInf?.name} src={userInf?.avatarUrl} sx={{ width: 32, height: 32 }} />
+                </IconButton>
                 <Stack sx={{ flexGrow: 1 }}>
                     <Typography variant="body2" fontWeight="bold">
                         {userInf?.name}
