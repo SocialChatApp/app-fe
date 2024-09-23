@@ -22,11 +22,6 @@ function RoomPage({ setForm, socket }: RoomPageProps) {
 
     const { info: userInfo } = useSelector((store: RootState) => store.user);
 
-    const privateUserInfo = {
-        name: '',
-        avatarUrl: ''
-    }
-
     useEffect(() => {
 
 
@@ -79,8 +74,8 @@ function RoomPage({ setForm, socket }: RoomPageProps) {
 
         const payload = {
             roomName,
-            sender: userInfo.searchType == 'PRIVATE' ? privateUserInfo.name : userInfo.name,
-            avatarUrl: userInfo.searchType == 'PRIVATE' ? privateUserInfo.avatarUrl : userInfo.avatarUrl,
+            sender: userInfo.name,
+            avatarUrl: userInfo.avatarUrl,
             message: clientMessage
         };
 

@@ -1,5 +1,5 @@
 import { Button, Typography } from '@mui/material'
-import React, { Dispatch, SetStateAction, useEffect } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { Socket } from 'socket.io-client'
 
 interface roomProps {

@@ -233,11 +233,11 @@ export const postSlice = createSlice({
         })
 
 
-        builder.addCase(fetchAllPosts.fulfilled, (state, action) => {
+        builder.addCase(fetchAllPosts.fulfilled, (state) => {
             state.isLoading = false;
-        }).addCase(fetchAllPosts.pending, (state, action) => {
+        }).addCase(fetchAllPosts.pending, (state) => {
             state.isLoading = true;
-        }).addCase(fetchAllPosts.rejected, (state, action) => {
+        }).addCase(fetchAllPosts.rejected, (state) => {
             state.isLoading = true;
         })
 

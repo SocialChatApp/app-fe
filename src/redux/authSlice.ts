@@ -165,7 +165,7 @@ export const authSlice = createSlice({
             state.userInf = action.payload.userInf;
             state.isAuth = true;
         },
-        saveCookie: (state, action: PayloadAction<CreateUserDto>) => {
+        saveCookie: (state) => {
             Cookies.set('authInf', JSON.stringify(state), { expires: 7 });
         }
     },

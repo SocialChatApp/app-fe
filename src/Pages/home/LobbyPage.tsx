@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Socket, io } from 'socket.io-client';
+import { Socket } from 'socket.io-client';
 import RoomList from '../../components/RoomList';
 import { Box, Button, Stack, TextField } from '@mui/material';
 

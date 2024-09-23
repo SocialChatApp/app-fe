@@ -1,5 +1,5 @@
 import { Avatar, Box, IconButton, Stack, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CommentReplyInfoDto } from '../dto/CommentReplyInfoDto';
 import { UserInfoDto } from '../dto/UserInfoDto';
 import { useDispatch, useSelector } from 'react-redux';

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
-import { Box, Button, Skeleton, Stack, TextField } from '@mui/material';
-import RoomList from '../../components/RoomList';
+import { Box } from '@mui/material';
 import { Socket, io } from 'socket.io-client';
 import LobbyPage from './LobbyPage';
 import RoomPage from './RoomPage';
@@ -33,12 +32,6 @@ const authState: LogicOperation = {
 };
 
 let socket: Socket;
-
-const privateUserInfo = {
-    name: '',
-    avatarUrl: ''
-}
-
 
 
 function MeetingPage() {

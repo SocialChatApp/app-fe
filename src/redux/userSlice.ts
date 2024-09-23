@@ -109,8 +109,8 @@ export const updateUser = createAsyncThunk<CreateUserDto, { userId: string; user
 
         const response = await axios.patch(`${BASE_URL}/${userId}`, userObj, { headers });
 
-        const user = await dispatch(fetchUserInfo(userId)).unwrap();
-        dispatch(saveCookie(user));
+        await dispatch(fetchUserInfo(userId)).unwrap();
+        dispatch(saveCookie());
 
         return response.data;
     }
@@ -148,8 +148,6 @@ export const fetchInfoForMedia = createAsyncThunk<CreateUserDto, string>(
     }
 )
 
-
-const AUTH_URL = "http://localhost:3000/auth";
 
 
 const checkTokenValidity = async (dispatch: any) => {
@@ -198,17 +196,17 @@ export const userSlice = createSlice({
         builder.addCase(uploadAvatar.fulfilled, (state, action: PayloadAction<string>) => {
             state.isLoading = false;
             state.info.avatarUrl = action.payload;
-        }).addCase(uploadAvatar.pending, (state, action) => {
+        }).addCase(uploadAvatar.pending, (state) => {
             state.isLoading = true;
         }).addCase(uploadAvatar.rejected, (state, action) => {
             state.isLoading = false;
             console.log(action.error);
         })
 
-        builder.addCase(updateUser.fulfilled, (state, action) => {
+        builder.addCase(updateUser.fulfilled, (state) => {
             state.isLoading = false;
             // NO CONTENT RETURN FROM API
-        }).addCase(updateUser.pending, (state, action) => {
+        }).addCase(updateUser.pending, (state) => {
             state.isLoading = true;
         }).addCase(updateUser.rejected, (state, action) => {
             state.isLoading = false;
@@ -227,17 +225,17 @@ export const userSlice = createSlice({
             state.info.searchType = action.payload.searchType;
             state.info.avatarUrl = action.payload.avatarUrl;
 
-        }).addCase(fetchUserInfo.pending, (state, action) => {
+        }).addCase(fetchUserInfo.pending, (state) => {
             state.isLoading = true;
-        }).addCase(fetchUserInfo.rejected, (state, action) => {
+        }).addCase(fetchUserInfo.rejected, (state) => {
             state.isLoading = false;
         })
 
-        builder.addCase(fetchInfoForMedia.fulfilled, (state, action: PayloadAction<CreateUserDto>) => {
+        builder.addCase(fetchInfoForMedia.fulfilled, (state) => {
             state.isLoading = false;
-        }).addCase(fetchInfoForMedia.pending, (state, action) => {
+        }).addCase(fetchInfoForMedia.pending, (state) => {
             state.isLoading = true;
-        }).addCase(fetchInfoForMedia.rejected, (state, action) => {
+        }).addCase(fetchInfoForMedia.rejected, (state) => {
             state.isLoading = false;
         })
     }

@@ -30,7 +30,7 @@ const authState: LogicOperation = {
 };
 
 
-interface replyLogicOperation {
+export interface replyLogicOperation {
     isLoading: boolean;
 }
 
@@ -114,7 +114,7 @@ export const commentRepliesSlice = createSlice({
     extraReducers(builder) {
 
 
-        builder.addCase(createCommentReply.fulfilled, (state, action) => {
+        builder.addCase(createCommentReply.fulfilled, (state) => {
             state.isLoading = false;
             //payload return just commentReply id
         }).addCase(createCommentReply.pending, (state) => {

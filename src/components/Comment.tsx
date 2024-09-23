@@ -58,7 +58,7 @@ function Comment({ commentInfo, userInfo, onUserDetail, onFetchAllComments, onHa
     const handleDelete = async (commentId: string) => {
         await dispatch(deleteComment(commentId));
         await onFetchAllComments();
-        handleClose();
+        onHandleClose(false);
     }
 
     const fetchReply = async () => {

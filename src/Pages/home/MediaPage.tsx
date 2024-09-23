@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store';
 import { fetchAllPosts } from '../../redux/postSlice';
 import { PostInfoDto } from '../../dto/PostInfoDto';
 import { Box, Grid, LinearProgress } from '@mui/material';
-import Post from '../../components/Post';
 import MediaPost from '../../components/MediaPost';
 
 function MediaPage() {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Card, CardActions, CardContent, CardHeader, CardMedia, Divider, IconButton, Stack, Typography, Modal, Box, TextField, Avatar } from "@mui/material";
+import { Badge, Card, CardActions, CardContent, CardHeader, CardMedia, Divider, IconButton, Stack, Typography, Modal, Box, TextField } from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -11,7 +11,7 @@ import { deletePost } from "../redux/postSlice";
 import { CreateCommentDto } from '../dto/CreateCommentDto';
 import { createComment, fetchAllComments } from '../redux/commentSlice';
 import { CommentInfoDto } from '../dto/CommentInfoDto';
-import { fetchInfoForMedia, fetchUserInfo } from '../redux/userSlice';
+import { fetchInfoForMedia } from '../redux/userSlice';
 import { CreateUserDto } from '../dto/CreateUserDto';
 import { UserInfoDto } from '../dto/UserInfoDto';
 import { useNavigate } from 'react-router-dom';
@@ -182,6 +182,8 @@ function Post(postProp: CreatePostDto) {
                                     commentInfo={comment}
                                     userInfo={userInfo!}
                                     onUserDetail={handleUserDetail}
+                                    onFetchAllComments={fetchComments}
+                                    onHandleClose={handleClose}
                                 />
                             ))}
                         </Stack>

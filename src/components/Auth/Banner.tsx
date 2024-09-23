@@ -1,6 +1,5 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import '../../App.css';
-import photo1 from '../../assets/images/file.png';
 import Lottie from 'lottie-react';
 import animationdata from '../../assets/Animation - 1726184971780.json';
 

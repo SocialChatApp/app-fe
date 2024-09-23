@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { AppDispatch, RootState } from '../../redux/store';
 import { fetchOtherUserPosts } from '../../redux/postSlice';
 import { CreatePostDto } from '../../dto/CreatePostDto';
-import { Box, Fab, Grid, Avatar, Typography, Button, LinearProgress, Divider } from '@mui/material';
+import { Box, Grid, Avatar, Typography, LinearProgress, Divider } from '@mui/material';
 import Post from '../../components/Post';
 import { UserInfoDto } from '../../dto/UserInfoDto';
 import { fetchInfoForMedia } from '../../redux/userSlice';

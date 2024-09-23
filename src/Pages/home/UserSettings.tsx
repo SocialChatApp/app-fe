@@ -162,7 +162,7 @@ function UserSettings() {
                             value={formData.searchType}
                             fullWidth
                             sx={{ mb: 2 }}
-                            onChange={(e, value) => setFormData(prev => ({ ...prev, searchType: value }))}
+                            onChange={(_, value) => setFormData(prev => ({ ...prev, searchType: value }))}
                         >
                             <ToggleButton value="PRIVATE">PRIVATE</ToggleButton>
                             <ToggleButton value="PUBLIC">PUBLIC</ToggleButton>
