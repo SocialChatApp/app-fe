@@ -33,7 +33,6 @@ function AuthPageContainer() {
         }
     }
     return (
-        // <Container maxWidth="lg" >
         <Box >
             <Box width={"90%"} justifyContent="center" alignContent="center">
                 <Stack direction="row" spacing={{ xs: 1, sm: 2 }} justifyContent="center" alignItems="center">
@@ -47,7 +46,6 @@ function AuthPageContainer() {
             </Box>
             <Footer />
         </Box>
-        // </Container>
     );
 }
 

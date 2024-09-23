@@ -1,6 +1,4 @@
 import { Box, Button, Divider, Typography } from '@mui/material';
-import photo1 from '../../assets/images/file.png';
-import photo2 from '../../assets/images/People-showing.png';
 import '../../App.css';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckIcon from '@mui/icons-material/Check';
@@ -10,6 +8,10 @@ import { AppDispatch } from '../../redux/store';
 import Cookies from 'js-cookie';
 import { setUser } from '../../redux/userSlice';
 import { LogicOperation, updateAuthInf } from '../../redux/authSlice';
+import Lottie from 'lottie-react';
+
+import phoneAnimation from '../../assets/LottiePhoneAnimation.json';
+import sendMessageAnimation from '../../assets/LottieSendMessageAnimation.json';
 
 function MainPage() {
     const dispatch = useDispatch<AppDispatch>();
@@ -50,16 +52,9 @@ function MainPage() {
                         alignItems: 'center'
                     }}
                 >
-                    <Box
-                        component="img"
-                        sx={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            borderRadius: 10
-                        }}
-                        src={photo1}
-                        alt="Left Image"
+                    <Lottie
+                        animationData={phoneAnimation}
+                        style={{ width: 300, height: 300 }}
                     />
                 </Box>
 
@@ -107,16 +102,8 @@ function MainPage() {
                         alignItems: 'center'
                     }}
                 >
-                    <Box
-                        component="img"
-                        sx={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            borderRadius: 10
-                        }}
-                        src={photo2}
-                        alt="Right Image"
+                    <Lottie
+                        animationData={sendMessageAnimation}
                     />
                 </Box>
 
